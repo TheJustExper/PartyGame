@@ -10,7 +10,7 @@
         "trivia": {
             "Timer": {
                 "gameEnd": 4000,
-                "roundEnd": 1000,
+                "roundEnd": 2000,
                 "recieveAnswers": 200
             }
         }

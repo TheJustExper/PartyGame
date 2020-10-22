@@ -1021,16 +1021,15 @@
  }
 
  #menu #playersVoted {
-     position: absolute;
-     bottom: 0;
-     left: 0;
-     width: auto;
-     height: 45px;
-     padding: 15px;
-     box-shadow: var(--shadow);
-     background-color: #393d44;
-     display: flex;
- }
+    position: absolute;
+    bottom: 230px;
+    width: auto;
+    height: 45px;
+    padding: 15px 20px;
+    box-shadow: var(--shadow);
+    background-color: rgb(57 61 68);
+    display: flex;
+}
 
  #menu #playersVoted .color {
     height: 40px;

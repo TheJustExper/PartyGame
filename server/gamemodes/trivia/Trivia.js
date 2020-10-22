@@ -167,10 +167,12 @@ module.exports = class {
 
             if (time == 0) {
                 time = this.roundTimer;
-                if (!this.isChanging) {
-                    this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                    this.newGame()
-                }
+                setTimeout(() => {
+                    if (!this.isChanging) {
+                        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                        this.newGame()
+                    }
+                }, 500)
             };
         }, 1000);
     }
