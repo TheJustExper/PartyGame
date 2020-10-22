@@ -5,7 +5,7 @@ module.exports = class {
     constructor(gameserver) {
         this.gameServer = gameserver;
 
-        this.catagories = ["History"];
+        this.catagories = ["History", "Public Knowledge"];
         this.catagory = [
             [
                 {
@@ -78,6 +78,13 @@ module.exports = class {
                     answers: ["Islamabad", "Islamasad", "Islamapan"],
                     correctAnswer: 0
                 },
+            ],
+            [
+                {
+                    question: "Are you a twat?",
+                    answers: ["True", "False"],
+                    correctAnswer: 0
+                }
             ]
         ]
 
@@ -147,7 +154,7 @@ module.exports = class {
 
         this.question = question;
         this.roundAnswered = []
-        this.roundMax = 1;
+        this.roundMax = catagory.length - 1;
         this.isChanging = false;
 
         this.gameServer.broadcast(new Packets.SendQuestion(question));

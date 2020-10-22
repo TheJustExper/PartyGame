@@ -78,10 +78,16 @@ export default class {
             answers.innerHTML += `<span id="answer-${index}" style="background-color: rgb(97 104 117);" class="answer" onclick="window.core.sendAnswer(${index})">${answer}</span>`;
         });
 
-        const screen = document.getElementById("awaiting");
+        const screen = document.getElementById("awaitingText");
         if (screen != null) {
             screen.style = "display: none";
             screen.remove();
+        }
+
+        const screen2 = document.getElementById("awaiting");
+        if (screen2 != null) {
+            screen2.style = "display: none";
+            screen2.remove();
         }
 
         const catagories = document.getElementById("catagories");
@@ -109,7 +115,7 @@ export default class {
         // menu.innerHTML += "<div id='header'></div>";
         // const header = document.getElementById("header");
         // header.style += "animation: tada; animation-duration: 2s;"
-        this.audio.win.volume = 0.3;
+        this.audio.win.volume = 0.1;
         this.audio.win.play();
     }
 
@@ -127,6 +133,11 @@ export default class {
         catagory.innerHTML = "<h1>Choose a catagory</h1><div id='list'></div>";
 
         document.body.appendChild(catagory);
+
+        const catagory2 = document.createElement("div");
+        catagory2.id = "awaiting";
+
+        document.body.appendChild(catagory2);
         
         const list = document.getElementById("list");
 
@@ -139,10 +150,14 @@ export default class {
 
     onAwaitingCatagory() {
         const screen = document.createElement("div");
-        screen.id = "awaiting";
+        screen.id = "awaitingText";
         screen.innerHTML += "<h1>Awaiting catagory selection...</h1>";
 
+        const text = document.createElement("div");
+        text.id = "awaiting";
+
         document.body.appendChild(screen);
+        document.body.appendChild(text)
     }
 
     resetVoters() {
