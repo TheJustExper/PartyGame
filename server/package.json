@@ -1,0 +1,17 @@
+{
+  "name": "partyserver",
+  "version": "1.0.0",
+  "description": "Server for the PartyMaster game site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.2",
+    "log4js": "^6.3.0",
+    "shortid": "^2.2.15",
+    "ws": "^7.3.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+    "secret": "test",
+    "MAIN_SERVER": {
+        "port": 8080
+    },
+    "gameserver": {
+        "countdown": 3
+    },
+    "gamemode": {
+        "trivia": {
+            "Timer": {
+                "gameEnd": 4000,
+                "roundEnd": 1000,
+                "recieveAnswers": 200
+            }
+        }
+    }
+}
