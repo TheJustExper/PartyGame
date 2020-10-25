@@ -5,12 +5,12 @@ const PlayerList = require("./PlayerList");
 const StartGame = require("./StartGame");
 const LeaderBoard = require("./LeaderBoard");
 const EndGame = require("./EndGame");
-const SendQuestion = require("./SendQuestion");
+const Question = require("./Question");
 const RoundEnd = require("./RoundEnd");
 const GameEnded = require("./GameEnded");
-const SendVoter = require("./SendVoter");
+const Voter = require("./Voter");
 const RoundTimer = require("./RoundTimer");
-const SendCatagory = require("./SendCatagory");
+const Catagory = require("./Catagory");
 const AwaitingCatagory = require("./AwaitingCatagory");
 
 module.exports = {
@@ -19,11 +19,11 @@ module.exports = {
     StartGame,
     LeaderBoard,
     EndGame,
-    SendQuestion,
+    Question,
     RoundEnd,
     GameEnded,
-    SendVoter,
+    Voter,
     RoundTimer,
-    SendCatagory,
+    Catagory,
     AwaitingCatagory,
 }

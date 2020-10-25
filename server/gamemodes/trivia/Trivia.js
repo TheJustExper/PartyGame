@@ -126,7 +126,13 @@ module.exports = class {
         
         this.playerAskedToPickCatagory = randomPlayer;
 
-        randomPlayer.sendPacket(new Packets.SendCatagory(this.catagories));
+
+        // Send the catagory list to a random player picked
+
+        randomPlayer.sendPacket(new Packets.Catagory(this.catagories));
+        
+        // Filter through the players that are not picked and send them the awaiting
+        // screen so that they know whats happening
 
         players.filter(player => player.id != randomPlayer.id).forEach((player) => {
             player.sendPacket(new Packets.AwaitingCatagory());
@@ -134,6 +140,11 @@ module.exports = class {
     }
 
     onPickedCatagory(player, catagory) {
+        // If the game is awaiting a catagory whilst picked then
+        // check if that player is the same as the random one
+        // picked if so then assign the variables with the right data
+        // and call the function to start the game
+        
         if (this.awaitingCatagory) {
             if (player.id == this.playerAskedToPickCatagory.id) {
                 this.pickedCatagory = catagory;
@@ -157,7 +168,7 @@ module.exports = class {
         this.roundMax = catagory.length - 1;
         this.isChanging = false;
 
-        this.gameServer.broadcast(new Packets.SendQuestion(question));
+        this.gameServer.broadcast(new Packets.Question(question));
         this.gameServer.broadcast(new Packets.RoundTimer(time));
 
         this.timer = setInterval(() => {
@@ -178,7 +189,14 @@ module.exports = class {
     }
 
     onAnswer(play, answer) {
-        console.log("Player: " + play.id + " answered: " + answer);
+
+        /*
+            This nonsense gives players points if they chose the correct
+            answer then pushes them into a answer array then broadcasts
+            the voter color so that they know who has voted. Then what 
+            happens is the game recieves all votes and does some timer
+            shit so that the functions dont run quick as balls n stuff.
+        */
 
         if (!this.roundAnswered.find(p => p.player == play.id)) {
             if (this.question.correctAnswer == answer) play.score += 20;
@@ -186,7 +204,7 @@ module.exports = class {
             let value = { player: play, isRight: this.question.correctAnswer == answer, question: this.question }
             this.roundAnswered.push(value);
 
-            this.gameServer.broadcast(new Packets.SendVoter(play.color));
+            this.gameServer.broadcast(new Packets.Voter(play.color));
 
             if (this.roundAnswered.length == this.gameServer.players.length) {
                 console.log("All players voted! Sending results...");

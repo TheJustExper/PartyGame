@@ -12,18 +12,21 @@ export default class {
         this.socket.onmessage = this.onMessage.bind(this);
     }
 
+    createString(opcode, str) {
+        var msg = new DataView(new ArrayBuffer(1 + str.length * 2));
+        msg.setUint8(0, opcode);
+        for (var i = 0; i < str.length; ++i) msg.setUint16(1 + 2 * i, str.charCodeAt(i), true);
+        return msg;
+    }
+
     sendUsername(name) {
-        var msg = new DataView(new ArrayBuffer(1 + name.length * 2));
-        msg.setUint8(0, 0);
-        for (var i = 0; i < name.length; ++i) msg.setUint16(1 + 2 * i, name.charCodeAt(i), true);
-        this.send(msg);
+        let str = this.createString(0, name);
+        this.send(str);
     }
 
     sendMessage(message) {
-        var msg = new DataView(new ArrayBuffer(1 + message.length * 2));
-        msg.setUint8(0, 10);
-        for (var i = 0; i < message.length; ++i) msg.setUint16(1 + 2 * i, message.charCodeAt(i), true);
-        this.send(msg);
+        let str = this.createString(1, message);
+        this.send(str);
     }
 
     sendStart() {
@@ -64,9 +67,5 @@ export default class {
 
     onMessage(data) {
         this.packetHandler.handlePacket(data);
-    }
-
-    bufString(s) {
-        
     }
 }

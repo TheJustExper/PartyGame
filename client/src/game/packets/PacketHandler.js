@@ -1,4 +1,4 @@
-import Leaderboard from "../../../../server/packets/LeaderBoard";
+import Packets from "./Packets";
 
 export default class {
     constructor(core) {
@@ -12,7 +12,7 @@ export default class {
         const opcode = data.getUint8(offset++);
 
         switch (opcode) {
-            case 1:
+            case Packets.PlayerList:
                 this.core.socket.onceUsernameIsSent();
                 this.core.resetLobby();
                 
@@ -35,7 +35,7 @@ export default class {
 
                 this.core.setPlayers(playersList);
                 break;
-            case 2:
+            case Packets.StartGame:
                 const state = document.getElementById("state");
                 const time = data.getUint8(offset);
 
@@ -53,7 +53,7 @@ export default class {
                     // this.core.audio.music.pause()
                 }
                 break;
-            case 3:
+            case Packets.Leaderboard:
                 let leaderboard = []
                 var players = data.getUint8(offset);
                 offset += 1;
@@ -80,10 +80,10 @@ export default class {
 
                 this.core.setLeaderboard(leaderboard);
                 break;
-            case 4:
+            case Packets.EndGame:
                 window.location.reload();
                 break;
-            case 5:
+            case Packets.Question:
                 let question = {
                     question: "",
                     answers: []
@@ -110,12 +110,12 @@ export default class {
                 this.core.resetVoters();
                 this.core.showQuestion(question);
                 break;
-            case 6:
+            case Packets.RoundEnd:
                 const answer = data.getUint8(offset);
                 offset += 1;
 
                 this.core.roundEndResult(answer);
-            case 7:
+            case Packets.Voter:
                 const colorLength = data.getUint8(offset);
                 offset += 1;
 
@@ -124,16 +124,16 @@ export default class {
 
                 this.core.addPlayerVoted(color);
                 break;
-            case 8:
+            case Packets.GameEnded:
                 this.core.onGameEnd();
                 break;
-            case 9:
+            case Packets.RoundTimer:
                 const timer = data.getUint8(offset);
                 offset += 1;
 
                 this.core.setRoundTimer(timer);
                 break;
-            case 10:
+            case Packets.ChatMessage:
                 const usernameLength = data.getUint8(offset);
                 offset += 1;
                 const username = data.getString(offset, usernameLength);
@@ -146,7 +146,7 @@ export default class {
 
                 this.core.addMessage(username, message);
                 break;
-            case 11:
+            case Packets.Catagory:
                 let catagories = []
                 const catagorieAmount = data.getUint8(offset);
                 offset += 1;
@@ -163,7 +163,7 @@ export default class {
 
                 this.core.onCatagories(catagories);
                 break;
-            case 12:
+            case Packets.AwaitingCatagory:
                 this.core.onAwaitingCatagory();
                 break;
         }
