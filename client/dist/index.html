@@ -7,17 +7,60 @@
         />
     </head>
     <body>
-      <div id="menu">
-        <div class="section left">
-            <input placeholder="Username" value="Testing" id="username"/>
-            <div id="play" class="sections">
-                <div class="text">
-                    <h1>Play</h1>
-                    <p>Selected mode: <span>Normal</span></p>
+        <div id="main">
+            <div id="fade"></div>
+                <div id="serverList">
+                <div class="header">
+                    <h1>SERVER LIST</h1>
+                    <span id="serverClose">X</span>
                 </div>
-                <div class="slide"></div>
+                <div class="inner">
+                        <div class="servers">
+                            <div id="server-1" ip="ws://localhost:5050" class="server">
+                                <div class="players">0/10</div>
+                                <div class="box">
+                                    <h1>TRIVIA</h1>
+                                </div>
+                                <h1 id="join">JOIN</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="container" id="profile">
+                <div class="header">
+                    <div class="side">
+                        <img id="profileImg" src="https://thumbs.dreamstime.com/b/businessman-profile-icon-male-portrait-flat-design-vector-illustration-47075259.jpg"/>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="inner">
+
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="sections" id="servers">
+                    <div class="text">
+                        <h1>SERVERS</h1>
+                        <p>SERVER LIST</p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
+                <div class="sections">
+                    <div class="text">
+                        <h1>LEADERBOARD</h1>
+                        <p>TOP PLAYERS</p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
+                <div class="sections">
+                    <div class="text">
+                        <h1>SETTINGS</h1>
+                        <p>CHANGE CLIENT SETTINGS</p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
             </div>
         </div>
-    </div>
     </body>
 </html>

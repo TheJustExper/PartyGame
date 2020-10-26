@@ -12,9 +12,7 @@ export default class {
         this.players = []
         this.leaderboard = []
 
-        this.username = document.getElementById("username").value;
-
-        this.socket = new GameSocket(this);
+        this.socket = null; 
         this.menus = new MenuDesign(this);
 
         this.trivia = {}
@@ -31,6 +29,33 @@ export default class {
         this.audio = {
             music: new Audio(Music),
             win: new Audio(Win)
+        }
+
+        this.setup();
+    }
+
+    setup() {
+        const servers = document.getElementById("servers");
+        const fade = document.getElementById("fade");
+        const serverList = document.getElementById("serverList");
+
+        servers.onclick = () => {
+            const close = document.getElementById("serverClose");
+
+            fade.style = "display: block";
+            serverList.style = "display: block";
+
+            close.onclick = () => {
+                fade.style = "display: none";
+                serverList.style = "display: none";
+            }
+        }
+
+        const serverL = document.querySelector(".server #join")
+
+        serverL.onclick = (data) => {
+            let ip = data.target.parentElement.getAttribute("ip");
+            this.socket = new GameSocket(this, ip);
         }
     }
 
@@ -104,6 +129,30 @@ export default class {
         <div class="message">
             <p><b class="name">${name}:</b> ${message}</p>
         </div>`
+    }
+
+    serverJoined() {
+        document.body.innerHTML = `
+            <div id="menu">
+            <div class="section left">
+                <input placeholder="Username" value="Testing" id="username"/>
+                <div id="play" class="sections">
+                    <div class="text">
+                        <h1>Play</h1>
+                        <p>Selected mode: <span>Normal</span></p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
+            </div>
+        `
+
+        const play = document.getElementById("play");
+        const username = document.getElementById("username");
+
+        play.onclick = () => {
+            window.core.playButtonClicked();
+            window.core.socket.sendUsername(username.value);
+        }
     }
 
     onGameEnd() {

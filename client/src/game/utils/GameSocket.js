@@ -2,10 +2,10 @@ import PacketHandler from "../packets/PacketHandler";
 import "./StringView"
 
 export default class {
-    constructor(core) {
+    constructor(core, ip) {
         this.core = core;
         this.packetHandler = new PacketHandler(core);
-        this.socket = new WebSocket("ws://localhost:5050");
+        this.socket = new WebSocket(ip);
         this.socket.binaryType = "arraybuffer";
         this.socket.onopen = this.onOpen.bind(this);
         this.socket.onclose = this.onClose.bind(this);
@@ -49,7 +49,9 @@ export default class {
         this.send(buf);
     }
 
-    onOpen() {}
+    onOpen() {
+        this.core.serverJoined();
+    }
 
     onceUsernameIsSent() {
         this.core.menus.loadMenu(1);
