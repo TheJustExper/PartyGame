@@ -1,11 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Baloo+Thambi|Schoolbell&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
  :root {
-     --ui-scale: 1.5;
+     --regular-color: rgb(133 109 255);
+     --ui-scale: 1;
      --shadow: 0 0 0 calc(1.5px*var(--ui-scale)) #121418, 0 calc(3px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) #121418, calc(-4.5px*var(--ui-scale)) calc(6px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) rgba(0, 0, 0, .1);
  }
 
  * {
+    font-weight: 700;
      margin: 0;
      padding: 0;
      text-shadow: 0.07em 0.07em 0 rgba(15, 18, 23, .9), -0.07em 0.07em 0 rgba(15, 18, 23, .9), 0.07em -0.07em 0 rgba(15, 18, 23, .9), -0.07em -0.07em 0 rgba(15, 18, 23, .9), 0 0.0798em 0 rgba(15, 18, 23, .9), 0 -0.0798em 0 rgba(15, 18, 23, .9), 0.0798em 0 0 rgba(15, 18, 23, .9), -0.0798em 0 0 rgba(15, 18, 23, .9), 0 0.0998em 0 rgba(15, 18, 23, .9), 0.0798em 0.0998em 0 rgba(15, 18, 23, .9), -0.0798em 0.0998em 0 rgba(15, 18, 23, .9), 0 0.1398em 0 rgba(15, 18, 23, .9), 0.0798em 0.1398em 0 rgba(15, 18, 23, .9), -0.0798em 0.1398em 0 rgba(15, 18, 23, .9), -0.2em 0.13em 0 rgba(17, 17, 17, .25);
@@ -15,11 +18,12 @@
      display: flex;
      align-items: center;
      justify-content: center;
-     font-family: Baloo Thambi !important;
+     font-family: Rajdhani !important;
+     font-weight: 200;
      overflow: hidden;
      height: 100vh;
-     background-color: rgb(25 25 25);
-     background-image: url(https://cliply.co/wp-content/uploads/2019/08/371908020_CONFETTI_1920x1080.png);
+     background-color: rgb(24 24 24);
+     
      background-position: center;
      background-size: 120%, 120%;
  }
@@ -223,15 +227,16 @@
     height: 50px;
     background-color: rgb(97 104 117);    
     border-radius: 3px;
-    border-left: 3px solid black;
-    border-right: 3px solid black;
-    border-bottom: 3px solid black;
     outline: none;
     padding: 10px 10px 10px 15px;
     box-sizing: border-box;
     color: white;
-    font-family: Baloo Thambi !important;
+    font-family: Rajdhani !important;
     font-size: 20px;
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
  }
 
  canvas {
@@ -240,7 +245,7 @@
   display: flex;
   border-radius: 3px;
   box-shadow: var(--shadow);
-  background-color: white;
+  background-color: black;
  }
 
  .app {
@@ -274,7 +279,7 @@
     border-radius: 3px;
     border: none;
     font-size: 12px;
-    font-family: Baloo Thambi;
+    font-family: Rajdhani;
     background-color: #7289da;
     overflow: hidden;
     box-shadow: #596ba8 inset 0 0 10px;
@@ -371,7 +376,7 @@
  }
 
  #popup .inner .graphics .graphic-column .on {
-     background-color: #00ff9d;
+     background-color: var(--regular-color);
  }
 
  #popup .inner .graphics .graphic-column .off {
@@ -482,14 +487,17 @@
   transition: .1s;
   position: relative;
   border-radius: 3px;
-  box-shadow: var(--shadow);
   border: none;
   outline: none;
   color: rgb(255 255 255);
   font-size: 20px;
   padding-left: 15px;
   margin-bottom: 28px;
-  font-family: Baloo Thambi !important;
+  font-family: Rajdhani !important;
+  box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
  }
 
  @keyframes border {
@@ -513,7 +521,7 @@
  }
 
  #popup .inner b {
-     color: #00ff9d;
+     color: var(--regular-color);
  }
 
  #popup .inner p {
@@ -643,7 +651,7 @@
 
  #checklist .check .completionBar .completion {
      height: 10px;
-     background-color: #00ff9d;
+     background-color: var(--regular-color);
      border-radius: 30px;
      overflow: hidden;
      position: relative;
@@ -763,7 +771,7 @@
      }
 
      50% {
-         color: #00ff9d;
+         color: var(--regular-color);
      }
 
      100% {
@@ -772,9 +780,9 @@
  }
 
  #serverList {
-    background-color: #393d44;
-    width: 285px;
-    height: 285px;
+    background-color: rgb(57 61 68);
+    width: 350px;
+    height: 350px;
     margin-bottom: 25px;
     box-sizing: border-box;
     transition: .1s;
@@ -799,7 +807,7 @@
  }
 
  #serverList .header h1 {
-     font-size: 20px;
+     font-size: 25px;
      color: white;
  }
 
@@ -809,29 +817,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
  }
 
  #serverList .inner .servers {
-    width: 250px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
     background-color: rgb(34 37 41);
     padding: 16px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     justify-content: space-between;
+    border: 3px solid #000000;
  }
 
  #serverList .inner .servers .server {
-    width: 218px;
-    height: 36px;
+    width: 100%;
+    height: 40px;
     background-color: rgb(62 70 81);
-    border-radius: 3px;
     margin-bottom: 7px;
     display: flex;
     align-items: center;
     padding-right: 10px;
+    border: 2px solid #000000;
     box-sizing: border-box;
+    border-radius: 5px;
+
  }
 
  #serverList #serverClose {
@@ -863,13 +876,13 @@
  }
 
  #serverList .inner .servers .server .box h1 {
-     font-size: 14px;
+     font-size: 17px;
      color: white;
  }
 
  #serverList .inner .servers .server h1 {
-    font-size: 14px;
-    color: #00FF9D;
+    font-size: 17px;
+    color: var(--regular-color);
  }
 
  #fade {
@@ -889,43 +902,121 @@
  }
 
  #main #profile {
-    background-color: #393d44;
     width: 285px;
     height: 285px;
     margin-bottom: 25px;
     box-sizing: border-box;
-    transition: .1s;
     position: relative;
-    border-radius: 5px;
-    box-shadow: var(--shadow);
     flex: 1 1 auto;
-    overflow: hidden;
     transition: .2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
  }
 
  #main #profile .bottom {
-    height: calc(100% - 80px);
-    display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 180px;
+    background-color: rgb(47 52 61);
+    border-radius: 3px;
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+ }
+ 
+ .bottom .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(34 37 41);
+    border: 2px solid rgb(0 0 0);
+    border-radius: 3px;
+    padding: 10px;
  }
 
- #main #profile .bottom .inner {
-    width: 250px;
-    height: 172px;
-    background-color: #222529;
-    border-radius: 3px;
-    border: 2px solid black;
+ #main #profile .bottom .button {
+    height: 49px;
+    border-radius: 5px;
+    border: 2px solid rgb(0 0 0);
+    flex: 1 0 16%;
+    margin: 5px;
+    background-color: rgb(111 120 131);
+    justify-content: center;
+    align-items: center;
+    color: rgb(255 255 255);
+    display: flex;
+    transition: 0.2s;
+    overflow: hidden;
+    user-select: none;
  }
+
+ #main #profile .bottom .button:hover {
+    transform: scale(1.05);
+    background-color: var(--regular-color);
+ }
+
+ #main #profile .bottom .button:hover .slide {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 45px;
+    background-color: rgba(255, 255, 255, 0.6);
+}
 
  #main #profile .header {
-     background-color: #2F343D;
-     width: 100%;
-     height: 80px;
+    background-color: rgb(47 52 61);
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+ }
+
+ #main #profile .header .side {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+ }
+
+ #main #profile .header .icons {
      display: flex;
-     align-items: center;
-     padding: 15px;
-     box-sizing: border-box;
+     flex-direction: row;
+ }
+
+ .icons .icon {
+    width: 25px;
+    height: 25px;
+    border: 2px solid rgb(0 0 0);
+    border-radius: 5px;
+    background-color: rgb(32 38 47);
+    margin-left: 8px;
+ }
+
+ #main #profile .header .side .text {
+    display: flex;
+    flex-direction: column;
+    color: rgb(255 255 255);
+    margin-left: 10px;
+ }
+
+ #main #profile .header .side .text h1 {
+    font-size: 20px;
+ }
+
+ #main #profile .header .side .text b {
+    font-size: 16px;
+    color: #8C9399;
  }
 
  #main #profile .header #profileImg {
@@ -947,26 +1038,29 @@
 
 #main .sections {
     background-color: #393d44;
-    width: 350px;
+    width: 285px;
     height: 74px;
     margin-bottom: 32px;
     box-sizing: border-box;
     transition: .1s;
     position: relative;
     border-radius: 3px;
-    box-shadow: var(--shadow);
     flex: 1 1 auto;
     overflow: hidden;
     transition: .2s;
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
 }
 
 #main .sections h1 {
-    font-size: 25px;
+    font-size: 20px;
 }
 
 #main .sections:hover {
     transform: scale(1.1);
-    background-color: #00ff9d;
+    background-color: var(--regular-color);
     z-index: 2;
 }
 
@@ -985,25 +1079,21 @@
 }
 
 #main .sections .text span {
-    color: #00ff9d;
+    color: var(--regular-color);
 }
 
 #main .sections .text {
     z-index: 1;
     text-transform: uppercase;
-    color: white;
+    color: rgb(255 255 255);
     position: relative;
     left: 15px;
-    top: 7px;
-    text-shadow:
-        -2px -2px 0 #000,
-        0 -2px 0 #000,
-        2px -2px 0 #000,
-        2px 0 0 #000,
-        2px 2px 0 #000,
-        0 2px 0 #000,
-        -2px 2px 0 #000,
-        -2px 0 0 #000;
+    top: -3px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-shadow: -2px -2px 0 #000, 0 -2px 0 #000, 2px -2px 0 #000, 2px 0 0 #000, 2px 2px 0 #000, 0 2px 0 #000, -2px 2px 0 #000, -2px 0 0 #000;
 }
 
  #menu .info::-webkit-scrollbar {
@@ -1022,7 +1112,7 @@
  }
 
  #menu .info b {
-     color: #00ff9d;
+     color: var(--regular-color);
  }
 
  #menu .info p {
@@ -1067,7 +1157,7 @@
      background-color: #686e7b;
      box-shadow: var(--shadow);
      border-radius: 3px;
-     font-family: Baloo Thambi;
+     font-family:  Rajdhani;
  }
 
  #menu .middle button {
@@ -1089,10 +1179,10 @@
      letter-spacing: .04em;
      transition: background-color .4s ease-in-out !important;
      color: #fff;
-     background-color: #00ff9d;
+     background-color: var(--regular-color);
      box-shadow: var(--shadow);
      border-radius: 3px;
-     font-family: Baloo Thambi;
+     font-family: Rajdhani;
  }
 
  #menu .left .sections:hover .slide {
@@ -1131,25 +1221,21 @@
  }
 
  #menu .left .sections .text span {
-     color: #00ff9d;
+     color: var(--regular-color);
  }
 
  #menu .left .sections .text {
-     z-index: 1;
-     text-transform: uppercase;
-     color: white;
-     position: relative;
-     left: 15px;
-     top: 7px;
-     text-shadow:
-         -2px -2px 0 #000,
-         0 -2px 0 #000,
-         2px -2px 0 #000,
-         2px 0 0 #000,
-         2px 2px 0 #000,
-         0 2px 0 #000,
-         -2px 2px 0 #000,
-         -2px 0 0 #000;
+    z-index: 1;
+    text-transform: uppercase;
+    color: rgb(255 255 255);
+    position: relative;
+    left: 15px;
+    top: -3px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-shadow: -2px -2px 0 #000, 0 -2px 0 #000, 2px -2px 0 #000, 2px 0 0 #000, 2px 2px 0 #000, 0 2px 0 #000, -2px 2px 0 #000, -2px 0 0 #000;
  }
 
  #menu .gameType {
@@ -1178,19 +1264,22 @@
      transition: .1s;
      position: relative;
      border-radius: 3px;
-     box-shadow: var(--shadow);
      flex: 1 1 auto;
      overflow: hidden;
      transition: .2s;
+     box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
  }
 
  #menu .left .sections h1 {
-     font-size: 25px;
+     font-size: 20px;
  }
 
  #menu .left .sections:hover {
      transform: scale(1.1);
-     background-color: #00ff9d;
+     background-color: var(--regular-color);
      z-index: 2;
  }
 
@@ -1206,11 +1295,14 @@
     flex-direction: column;
     margin-left: 40px;
     border-radius: 3px;
-    box-shadow: var(--shadow);
     flex: 1 1 auto;
     overflow: hidden;
     transition: .2s;
     background-color: rgb(29 31 35);
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
  }
 
  #menu .lobby h1 {
@@ -1287,6 +1379,11 @@
      left: 0;
      transform: translateY(-50%);
      top: 50%;
+ }
+
+ #menu #leaderboard .items {
+    display: flex;
+    flex-direction: column;
  }
 
  #menu  #leaderboard::-webkit-scrollbar {

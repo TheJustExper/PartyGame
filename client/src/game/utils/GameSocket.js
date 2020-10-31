@@ -25,8 +25,10 @@ export default class {
     }
 
     sendMessage(message) {
-        let str = this.createString(1, message);
+        let str = this.createString(10, message);
         this.send(str);
+
+        console.log(message)
     }
 
     sendStart() {
@@ -46,6 +48,16 @@ export default class {
         const buf = new DataView(new ArrayBuffer(2));
         buf.setUint8(0, 3);
         buf.setUint8(1, catagory)
+        this.send(buf);
+    }
+
+    sendPixel(x1, y1, x2, y2) {
+        const buf = new DataView(new ArrayBuffer(9));
+        buf.setUint8(0, 4);
+        buf.setUint16(1, x1)
+        buf.setUint16(3, y1)
+        buf.setUint16(5, x2)
+        buf.setUint16(7, y2)
         this.send(buf);
     }
 

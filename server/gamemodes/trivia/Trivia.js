@@ -155,6 +155,9 @@ module.exports = class {
     }
 
     newGame() {
+        this.gameServer.broadcast(new Packets.ResetScreen());
+        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+        
         clearInterval(this.timer);
 
         let question = this.getRandomQuestion();

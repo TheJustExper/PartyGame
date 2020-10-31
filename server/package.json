@@ -11,6 +11,8 @@
   "dependencies": {
     "config": "^3.3.2",
     "log4js": "^6.3.0",
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.11",
     "shortid": "^2.2.15",
     "ws": "^7.3.0"
   }

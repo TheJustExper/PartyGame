@@ -1,4 +1,5 @@
 export default {
+    GameType: 0,
     PlayerList: 1,
     StartGame: 2,
     Leaderboard: 3,
@@ -11,4 +12,6 @@ export default {
     ChatMessage: 10,
     Catagory: 11,
     AwaitingCatagory: 12,
+    ResetScreen: 13,
+    DrawPixel: 14,
 }

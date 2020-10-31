@@ -6,6 +6,7 @@ const BinaryReader = require("./utils/BinaryReader");
 const config = require("config");
 
 const Trivia = require("./gamemodes/trivia/Trivia");
+const Skribbl = require("./gamemodes/skribbl");
 
 let logger;
 
@@ -17,7 +18,9 @@ class GameServer {
 
         this.wss.on('connection', this.onConnection.bind(this));
 
-        this.gamemode = new Trivia(this);
+        this.gameType = 3;
+        this.gamemodes = [0, 0, new Trivia(this), new Skribbl(this)];
+        this.gamemode = this.gamemodes[this.gameType]
 
         this.state = "LOBBY";
         this.players = []
@@ -42,7 +45,7 @@ class GameServer {
     resetLobby() {
         this.state = "LOBBY";
         this.players = [];
-        this.startTime = 3;
+        this.startTime = 1;
     }
 
     onConnection(ws, req) {
@@ -95,12 +98,10 @@ class GameServer {
         }
     }
 
-    onChatMessage(from, message) {
-        this.broadcast(new Packets.ChatMessage(from, message));
-    }
-
     startGame() {
         if (this.players.length >= 2) {
+            this.broadcast(new Packets.GameType(this.gameType));
+
             let time = this.startTime;
             this.state = "COUNTDOWN";
             
@@ -113,8 +114,6 @@ class GameServer {
                     clearInterval(this.interval);
                     this.state = "INGAME";
                     this.gamemode.onGameStart();
-                    
-                    this.broadcast(new Packets.LeaderBoard(this.players));
                 }
             }, 1000)
         }

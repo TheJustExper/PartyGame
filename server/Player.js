@@ -69,9 +69,20 @@ class Player {
                 const catagory = msg.readUInt8();
                 this.game.gamemode.onPickedCatagory(this, catagory);
                 break;
+            case 4:
+                const x1 = msg.readUInt16();
+                const y1 = msg.readUInt16();
+                const x2 = msg.readUInt16();
+                const y2 = msg.readUInt16();
+
+                this.game.gamemode.onDraw(this, x1, y1, x2, y2);
+                break;
+            case 5:
+                console.log("Color change:");
+                break;
             case 10:
-                const message = msg.readStringUtf8();
-                this.game.onChatMessage(this.nickname, message);
+                let message = msg.readStringUtf8();
+                this.game.gamemode.onChatMessage(this, message);
                 break;
         }
     }

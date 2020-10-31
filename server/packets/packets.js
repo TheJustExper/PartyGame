@@ -1,5 +1,6 @@
 const BinaryWriter = require("../utils/BinaryWriter");
 
+const GameType = require("./GameType");
 const ChatMessage = require("./ChatMessage");
 const PlayerList = require("./PlayerList");
 const StartGame = require("./StartGame");
@@ -12,8 +13,11 @@ const Voter = require("./Voter");
 const RoundTimer = require("./RoundTimer");
 const Catagory = require("./Catagory");
 const AwaitingCatagory = require("./AwaitingCatagory");
+const ResetScreen = require("./ResetScreen");
+const DrawPixel = require("./DrawPixel");
 
 module.exports = {
+    GameType,
     ChatMessage,
     PlayerList,
     StartGame,
@@ -26,4 +30,6 @@ module.exports = {
     RoundTimer,
     Catagory,
     AwaitingCatagory,
+    ResetScreen,
+    DrawPixel,
 }

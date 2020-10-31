@@ -14,9 +14,12 @@ export default class {
 
         this.socket = null; 
         this.menus = new MenuDesign(this);
+        this.gamemode = null;
 
         this.trivia = {}
         this.sentAnswer = null;
+        
+        this.gameType = null;
 
         this.timer = null;
         this.lobby = null;
@@ -57,6 +60,10 @@ export default class {
             let ip = data.target.parentElement.getAttribute("ip");
             this.socket = new GameSocket(this, ip);
         }
+    }
+
+    showGamemodeScreen() {
+        this.gamemode.renderScreen();
     }
 
     playButtonClicked() {
@@ -102,7 +109,9 @@ export default class {
         quest.answers.forEach((answer, index) => {
             answers.innerHTML += `<span id="answer-${index}" style="background-color: rgb(97 104 117);" class="answer" onclick="window.core.sendAnswer(${index})">${answer}</span>`;
         });
+    }
 
+    resetScreen() {
         const screen = document.getElementById("awaitingText");
         if (screen != null) {
             screen.style = "display: none";
@@ -120,15 +129,19 @@ export default class {
             catagories.style = "display: none";
             catagories.remove();
        }
+
+       this.showGamemodeScreen();
     }
 
-    addMessage(name, message) {
+    addMessage(color, name, message) {
         const messages = document.getElementById("messages");
         
         messages.innerHTML += `
         <div class="message">
-            <p><b class="name">${name}:</b> ${message}</p>
+            <p><b class="name" style="color: ${color != null ? color : "white"}">${name}:</b> ${message}</p>
         </div>`
+
+        messages.scrollTop = messages.scrollHeight;
     }
 
     serverJoined() {

@@ -4,7 +4,7 @@
         "port": 8080
     },
     "gameserver": {
-        "countdown": 5
+        "countdown": 1
     },
     "gamemode": {
         "trivia": {

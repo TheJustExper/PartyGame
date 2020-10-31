@@ -1,3 +1,4 @@
+import Skribbl from "../games/Skribbl";
 import Packets from "./Packets";
 
 export default class {
@@ -12,6 +13,11 @@ export default class {
         const opcode = data.getUint8(offset++);
 
         switch (opcode) {
+            case 0:
+                const gameType = data.getUint8(offset);
+                this.core.gameType = gameType;
+                this.core.gamemode = new Skribbl();
+                break;
             case Packets.PlayerList:
                 this.core.socket.onceUsernameIsSent();
                 this.core.resetLobby();
@@ -49,7 +55,7 @@ export default class {
 
                 if (time == 0) {
                     this.core.state = "INGAME";
-                    this.core.menus.loadMenu(2);
+                    this.core.menus.loadMenu(this.core.gameType);
                     // this.core.audio.music.pause()
                 }
                 break;
@@ -116,10 +122,10 @@ export default class {
 
                 this.core.roundEndResult(answer);
             case Packets.Voter:
-                const colorLength = data.getUint8(offset);
+                var colorLength = data.getUint8(offset);
                 offset += 1;
 
-                const color = data.getString(offset, colorLength);
+                var color = data.getString(offset, colorLength);
                 offset += colorLength;
 
                 this.core.addPlayerVoted(color);
@@ -144,7 +150,12 @@ export default class {
                 const message = data.getString(offset, messageLength);
                 offset += messageLength;
 
-                this.core.addMessage(username, message);
+                var colorLength = data.getUint8(offset);
+                offset += 1;
+                var color = data.getString(offset, colorLength);
+                offset += colorLength;
+
+                this.core.addMessage(color, username, message);
                 break;
             case Packets.Catagory:
                 let catagories = []
@@ -165,6 +176,21 @@ export default class {
                 break;
             case Packets.AwaitingCatagory:
                 this.core.onAwaitingCatagory();
+                break;
+            case Packets.ResetScreen:
+                this.core.resetScreen();
+                break;
+            case Packets.DrawPixel:
+                const x1 = data.getUint16(offset);
+                offset += 2;
+                const y1 = data.getUint16(offset);
+                offset += 2;
+                const x2 = data.getUint16(offset);
+                offset += 2;
+                const y2 = data.getUint16(offset);
+                offset += 2; 
+
+                this.core.gamemode.drawFromServer(x1, y1, x2, y2);
                 break;
         }
     }

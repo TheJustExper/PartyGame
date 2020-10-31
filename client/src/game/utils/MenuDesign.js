@@ -78,6 +78,10 @@ export default class {
                         "></span>
                     </div>`
                 });
+            } else {
+                if (type == 3) {
+                    //menu.innerHTML = `<div id="leaderboard"></div>`
+                }
             }
         }
     }
