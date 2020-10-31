@@ -2,6 +2,9 @@
 import GameSocket from "./utils/GameSocket";
 import MenuDesign from "./utils/MenuDesign";
 
+import Trivia from "./games/Trivia";
+import Skribbl from "./games/Skribbl";
+
 import Music from "./audio/music_zapsplat_quiz_bed_concentration.mp3";
 import Win from "./audio/win.mp3";
 
@@ -13,7 +16,10 @@ export default class {
         this.leaderboard = []
 
         this.socket = null; 
+
         this.menus = new MenuDesign(this);
+        this.gamemodes = [new Trivia(), new Skribbl()]
+
         this.gamemode = null;
 
         this.trivia = {}

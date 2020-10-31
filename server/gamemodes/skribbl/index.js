@@ -5,7 +5,11 @@ module.exports = class {
     constructor(gameserver) {
         this.gameServer = gameserver;
 
-        this.drawings = ["Cat", "Dog", "Tree"]
+        this.drawings = [
+            "Cat", 
+            "Dog", 
+            "Tree",
+        ]
 
         this.awaitingCatagory = true;
 
@@ -56,12 +60,14 @@ module.exports = class {
         if (msg.length == 0 || msg.length > 30) return;
         if (player.id == this.playerAskedToPickCatagory.id) return;
 
-        this.gameServer.broadcast(new Packets.ChatMessage(player.nickname, msg, "white"));
-
         if (msg.toLowerCase() == this.pickedCatagory.toLowerCase()) {
             if (!this.playersCorrect.find(p => p.id == player.id)) {
                 this.playersCorrect.push(player);
             }
+
+            let players = this.playersCorrect.length + "/" + (this.gameServer.players.length - 1);
+
+            player.sendPacket(new Packets.ChatMessage("[SERVER]", `You guessed the correct word! Waiting for the others. [${players}]`, "rgb(133 109 255)"))
 
             if (this.playersCorrect.length == this.gameServer.players.length - 1) {
                 this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Everybody got the correct word`, "rgb(133 109 255)"))
@@ -69,7 +75,10 @@ module.exports = class {
                 this.playerIndex++;
                 if (this.playerIndex == this.gameServer.players.length) {
                     this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
-                    setTimeout(() => this.gameServer.broadcast(new Packets.EndGame()), 5000);
+                    setTimeout(() => {
+                        this.gameServer.broadcast(new Packets.EndGame())
+                        this.gameServer.resetLobby();
+                    }, 5000);
                 } else {
                     setTimeout(() => {
                         this.reset();
@@ -77,6 +86,8 @@ module.exports = class {
                     }, 3000);
                 }
             }
+        } else {
+            this.gameServer.broadcast(new Packets.ChatMessage(player.nickname, msg, player.color));
         }
     }
 

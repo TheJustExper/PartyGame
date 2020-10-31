@@ -18,8 +18,8 @@ class GameServer {
 
         this.wss.on('connection', this.onConnection.bind(this));
 
-        this.gameType = 3;
-        this.gamemodes = [0, 0, new Trivia(this), new Skribbl(this)];
+        this.gameType = 1;
+        this.gamemodes = [new Trivia(this), new Skribbl(this)];
         this.gamemode = this.gamemodes[this.gameType]
 
         this.state = "LOBBY";
@@ -45,7 +45,7 @@ class GameServer {
     resetLobby() {
         this.state = "LOBBY";
         this.players = [];
-        this.startTime = 1;
+        this.startTime = config.get("gameserver.countdown");
     }
 
     onConnection(ws, req) {

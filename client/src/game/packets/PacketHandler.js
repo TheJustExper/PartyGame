@@ -1,4 +1,3 @@
-import Skribbl from "../games/Skribbl";
 import Packets from "./Packets";
 
 export default class {
@@ -16,7 +15,7 @@ export default class {
             case 0:
                 const gameType = data.getUint8(offset);
                 this.core.gameType = gameType;
-                this.core.gamemode = new Skribbl();
+                this.core.gamemode = this.core.gamemodes[gameType];
                 break;
             case Packets.PlayerList:
                 this.core.socket.onceUsernameIsSent();

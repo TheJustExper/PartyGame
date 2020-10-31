@@ -27,13 +27,14 @@ export default class {
         `;
 
         const chatbox = document.getElementById("chatInput");
+
         chatbox.addEventListener("keyup", function(event) {
             if (event.keyCode === 13) {
               event.preventDefault();
               window.core.socket.sendMessage(chatbox.value);
               chatbox.value = "";
             }
-          });
+        });
 
         this.canvas = document.getElementById("game");
         this.canvas.width = 800;
