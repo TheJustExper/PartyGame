@@ -6,4 +6,8 @@ in hopes of learning how to create and manage game servers on a network. As well
 my other objective was to maybe publish this game once I had created multiple gamemodes
 as this could be something that could be played by people. awdawdawdaw
 
+# Trivia
 ![Gif of the Game](game.gif)
+
+# Skribbl
+![Gif of the Game](skribbl.gif)
