@@ -28,6 +28,12 @@ module.exports = class {
         this.playerAskedToPickCatagory = null;
     }
 
+    resetBoard(player) {
+        if (this.playerAskedToPickCatagory && this.playerAskedToPickCatagory.id == player.id) {
+            this.gameServer.broadcast(new Packets.ResetBoard());
+        }
+    }
+
     sendOutCatagory() {
         const players = this.gameServer.players;
         const randomPlayer = players[this.playerIndex];
@@ -61,16 +67,15 @@ module.exports = class {
                 this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Everybody got the correct word`, "rgb(133 109 255)"))
 
                 this.playerIndex++;
-                    if (this.playerIndex == this.gameServer.players.length) {
-                        this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
-                        setTimeout(() => this.gameServer.broadcast(new Packets.EndGame()), 3000);
-                    }
+                if (this.playerIndex == this.gameServer.players.length) {
+                    this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
+                    setTimeout(() => this.gameServer.broadcast(new Packets.EndGame()), 5000);
+                } else {
+                    setTimeout(() => {
+                        this.reset();
+                        this.sendOutCatagory();
+                    }, 3000);
                 }
-                
-                setTimeout(() => {
-                    this.reset();
-                    this.sendOutCatagory();
-                }, 3000);
             }
         }
     }

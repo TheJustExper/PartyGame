@@ -14,4 +14,5 @@ export default {
     AwaitingCatagory: 12,
     ResetScreen: 13,
     DrawPixel: 14,
+    ResetBoard: 15,
 }

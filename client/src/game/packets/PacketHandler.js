@@ -192,6 +192,9 @@ export default class {
 
                 this.core.gamemode.drawFromServer(x1, y1, x2, y2);
                 break;
+            case Packets.ResetBoard:
+                this.core.gamemode.resetBoard();
+                break;
         }
     }
 }

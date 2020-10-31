@@ -40,9 +40,15 @@ export default class {
         this.canvas.height = 600;
         this.ctx = this.canvas.getContext("2d");
 
-        this.clearScreen();
+        this.resetBoard();
 
         let d = this;
+
+        document.body.onkeyup = (({ keyCode }) => {
+            if (keyCode == 32) {
+                window.core.socket.sendResetBoard();
+            }
+        });
 
         this.canvas.addEventListener("mousemove", (e) => d.findxy('move', e), false);
         this.canvas.addEventListener("mousedown", (e) => d.findxy('down', e), false);
@@ -50,7 +56,7 @@ export default class {
         this.canvas.addEventListener("mouseout",  (e) => d.findxy('out',  e), false);
     }
 
-    clearScreen() {
+    resetBoard() {
         this.ctx.fillStyle = "white";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }

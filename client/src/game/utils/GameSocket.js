@@ -61,6 +61,12 @@ export default class {
         this.send(buf);
     }
 
+    sendResetBoard() {
+        const buf = new DataView(new ArrayBuffer(1));
+        buf.setUint8(0, 5);
+        this.send(buf);
+    }
+
     onOpen() {
         this.core.serverJoined();
     }

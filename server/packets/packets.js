@@ -15,6 +15,7 @@ const Catagory = require("./Catagory");
 const AwaitingCatagory = require("./AwaitingCatagory");
 const ResetScreen = require("./ResetScreen");
 const DrawPixel = require("./DrawPixel");
+const ResetBoard = require("./ResetBoard");
 
 module.exports = {
     GameType,
@@ -32,4 +33,5 @@ module.exports = {
     AwaitingCatagory,
     ResetScreen,
     DrawPixel,
+    ResetBoard,
 }

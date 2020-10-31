@@ -78,7 +78,7 @@ class Player {
                 this.game.gamemode.onDraw(this, x1, y1, x2, y2);
                 break;
             case 5:
-                console.log("Color change:");
+                this.game.gamemode.resetBoard(this);
                 break;
             case 10:
                 let message = msg.readStringUtf8();
