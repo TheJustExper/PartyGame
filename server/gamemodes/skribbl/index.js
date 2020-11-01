@@ -83,6 +83,8 @@ module.exports = class {
 
                 if (this.playerIndex == this.gameServer.players.length) {
                     this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
+                    this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                    this.gameServer.broadcast(new Packets.GameEnded());
                     setTimeout(() => {
                         this.gameServer.broadcast(new Packets.EndGame())
                         this.gameServer.resetLobby();
@@ -147,9 +149,14 @@ module.exports = class {
                         if (this.playerIndex == this.gameServer.players.length) {
                             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
                             setTimeout(() => {
-                                this.gameServer.broadcast(new Packets.EndGame())
-                                this.gameServer.resetLobby();
-                            }, 5000);
+                                this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                                this.gameServer.broadcast(new Packets.GameEnded());
+
+                                setTimeout(() => {
+                                    this.gameServer.broadcast(new Packets.EndGame())
+                                    this.gameServer.resetLobby();
+                                }, 5000);
+                            }, 2000);
                         } else {
                             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", "The word was: " + this.pickedCatagory, "rgb(133 109 255)"))
                             setTimeout(() => {
