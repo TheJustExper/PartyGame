@@ -120,6 +120,20 @@
     display: flex;
  }
 
+ #container #infoBox {
+    height: 40px;
+    width: auto;
+    background: rgb(97 104 117);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    color: rgb(255 255 255);
+    font-size: 11px;
+ }
+
  #trivia {
     display: flex;
     border-radius: 3px;

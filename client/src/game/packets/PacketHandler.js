@@ -136,7 +136,7 @@ export default class {
                 const timer = data.getUint8(offset);
                 offset += 1;
 
-                this.core.setRoundTimer(timer);
+                this.core.gamemode.setRoundTimer(timer);
                 break;
             case Packets.ChatMessage:
                 const usernameLength = data.getUint8(offset);

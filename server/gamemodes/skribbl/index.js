@@ -11,14 +11,17 @@ module.exports = class {
             "Tree",
         ]
 
+        this.playersCorrect = []
+
         this.awaitingCatagory = true;
 
+        this.timer = null;
         this.pickedCatagory = null;
         this.playerAskedToPickCatagory = null;
+        this.isChanging = false;
 
         this.playerIndex = 0;
-
-        this.playersCorrect = []
+        this.roundTimer = 10;
     }
 
     onGameStart() {
@@ -30,6 +33,7 @@ module.exports = class {
         this.awaitingCatagory = true;
         this.pickedCatagory = null;
         this.playerAskedToPickCatagory = null;
+        this.isChanging = false;
     }
 
     resetBoard(player) {
@@ -65,14 +69,18 @@ module.exports = class {
                 this.playersCorrect.push(player);
             }
 
+            player.score += 20;
+
             let players = this.playersCorrect.length + "/" + (this.gameServer.players.length - 1);
 
             player.sendPacket(new Packets.ChatMessage("[SERVER]", `You guessed the correct word! Waiting for the others. [${players}]`, "rgb(133 109 255)"))
 
             if (this.playersCorrect.length == this.gameServer.players.length - 1) {
-                this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Everybody got the correct word`, "rgb(133 109 255)"))
+                this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Everybody got the correct word`, "rgb(133 109 255)"));
+                this.isChanging = true;
 
                 this.playerIndex++;
+
                 if (this.playerIndex == this.gameServer.players.length) {
                     this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
                     setTimeout(() => {
@@ -107,6 +115,8 @@ module.exports = class {
     }
 
     newGame() {
+        clearInterval(this.timer);
+
         this.gameServer.broadcast(new Packets.ResetScreen());
         this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
 
@@ -115,6 +125,42 @@ module.exports = class {
         });
         
         this.playerAskedToPickCatagory.sendPacket(new Packets.ChatMessage("[SERVER]", "The word to draw is: " + this.pickedCatagory, "rgb(133 109 255)"))
+
+        let time = this.roundTimer;
+
+        this.gameServer.broadcast(new Packets.RoundTimer(time));
+
+        this.timer = setInterval(() => {
+            time--;
+
+            this.gameServer.broadcast(new Packets.RoundTimer(time));
+
+            if (time == 0) {
+                time = this.roundTimer;
+                clearInterval(this.timer);
+                setTimeout(() => {
+                    if (!this.isChanging) {
+                        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                        
+                        this.playerIndex++;
+
+                        if (this.playerIndex == this.gameServer.players.length) {
+                            this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
+                            setTimeout(() => {
+                                this.gameServer.broadcast(new Packets.EndGame())
+                                this.gameServer.resetLobby();
+                            }, 5000);
+                        } else {
+                            this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", "The word was: " + this.pickedCatagory, "rgb(133 109 255)"))
+                            setTimeout(() => {
+                                this.reset();
+                                this.sendOutCatagory();
+                            }, 4000);
+                        }
+                    }
+                }, 500)
+            };
+        }, 1000);
     }
 
     onDraw(player, x1, y1, x2, y2) {

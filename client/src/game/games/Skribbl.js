@@ -15,16 +15,27 @@ export default class {
         this.flag = false;
     }
 
+    setRoundTimer(timer) {
+        const roundTime = document.getElementById("roundTime");
+        roundTime.innerText = timer;
+    }
+
     renderScreen() {
         const menu = document.getElementById("menu");
         menu.innerHTML = `
             <div id="leaderboard"></div>
-            <canvas id="game"></canvas>
+            <div id="container">
+                <div id="infoBox"></div>
+                <canvas id="game"></canvas>
+            </div>
             <div id="chatbox">
                 <div id="messages"></div>
                 <input id="chatInput" placeholder="Send a message"/>
             </div>
         `;
+
+        const infoBox = document.getElementById("infoBox");
+        infoBox.innerHTML = `<h1>Round Timer: <b id="roundTime">10<b></h1>`;
 
         const chatbox = document.getElementById("chatInput");
 

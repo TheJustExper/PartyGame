@@ -181,6 +181,7 @@ module.exports = class {
 
             if (time == 0) {
                 time = this.roundTimer;
+                clearInterval(this.timer);
                 setTimeout(() => {
                     if (!this.isChanging) {
                         this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));

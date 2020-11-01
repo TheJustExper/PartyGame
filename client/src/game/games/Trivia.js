@@ -15,6 +15,11 @@ export default class {
         this.flag = false;
     }
 
+    setRoundTimer(timer) {
+        const roundTime = document.getElementById("roundTime");
+        roundTime.innerText = timer;
+    }
+
     renderScreen() {
         const menu = document.getElementById("menu");
         document.body.style = "justify-content: unset";

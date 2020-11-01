@@ -97,11 +97,6 @@ export default class {
         const answer = document.getElementById("answer-" + this.sentAnswer);
         answer.style = correct == 1 ? "background-color: #00ff9d" : "background-color: #ff003c;";
     }
-    
-    setRoundTimer(timer) {
-        const roundTime = document.getElementById("roundTime");
-        roundTime.innerText = timer;
-    }
 
     showQuestion(quest) {
         const question = document.getElementById("question");
