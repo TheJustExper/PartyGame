@@ -73,8 +73,6 @@ module.exports = class {
 
             let players = this.playersCorrect.length + "/" + (this.gameServer.players.length - 1);
 
-            player.sendPacket(new Packets.ChatMessage("[SERVER]", `You guessed the correct word! Waiting for the others. [${players}]`, "rgb(133 109 255)"))
-
             if (this.playersCorrect.length == this.gameServer.players.length - 1) {
                 this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Everybody got the correct word`, "rgb(133 109 255)"));
                 this.isChanging = true;
@@ -83,18 +81,25 @@ module.exports = class {
 
                 if (this.playerIndex == this.gameServer.players.length) {
                     this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
-                    this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                    this.gameServer.broadcast(new Packets.GameEnded());
+
                     setTimeout(() => {
-                        this.gameServer.broadcast(new Packets.EndGame())
-                        this.gameServer.resetLobby();
-                    }, 5000);
+                        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                        this.gameServer.broadcast(new Packets.GameEnded());
+
+                        setTimeout(() => {
+                            this.gameServer.broadcast(new Packets.EndGame())
+                            this.gameServer.resetLobby();
+                        }, 5000);
+                    }, 3000);
+
                 } else {
                     setTimeout(() => {
                         this.reset();
                         this.sendOutCatagory();
-                    }, 3000);
+                    }, 4000);
                 }
+            } else {
+                player.sendPacket(new Packets.ChatMessage("[SERVER]", `You guessed the correct word! Waiting for the others. [${players}]`, "rgb(133 109 255)"))
             }
         } else {
             this.gameServer.broadcast(new Packets.ChatMessage(player.nickname, msg, player.color));
@@ -156,7 +161,7 @@ module.exports = class {
                                     this.gameServer.broadcast(new Packets.EndGame())
                                     this.gameServer.resetLobby();
                                 }, 5000);
-                            }, 2000);
+                            }, 3000);
                         } else {
                             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", "The word was: " + this.pickedCatagory, "rgb(133 109 255)"))
                             setTimeout(() => {
