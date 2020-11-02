@@ -230,6 +230,12 @@
     color: #9E9E9E;
     padding-bottom: 10px;
     overflow-wrap: break-word;
+    animation: fadeIn; 
+    animation-duration: 0.2s; 
+ }
+
+ #chatbox #messages .message:last-child {
+    padding-bottom: 0px;
  }
 
  #chatbox #messages .message .name {

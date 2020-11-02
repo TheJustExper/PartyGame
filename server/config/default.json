@@ -13,6 +13,11 @@
                 "roundEnd": 2000,
                 "recieveAnswers": 200
             }
+        },
+        "skribbl": {
+            "Timer": {
+                "roundTimer": 60
+            }
         }
     }
 }

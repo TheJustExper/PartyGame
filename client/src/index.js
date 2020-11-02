@@ -1,4 +1,5 @@
 import Core from "./game/core";
+import "./hover.css";
 import "./index.css";
 
 window.onload = () => {

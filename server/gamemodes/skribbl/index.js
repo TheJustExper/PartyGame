@@ -9,7 +9,16 @@ module.exports = class {
             "Cat", 
             "Dog", 
             "Tree",
+            "Car",
+            "Bow",
+            "Wizard",
+            "Fan",
+            "Keyboard",
+            "Guitar",
+            "Bongos",
         ]
+
+        this.bannedWords = ["fuck", "ass", "wank", "cunt", "twat"];
 
         this.playersCorrect = []
 
@@ -20,8 +29,11 @@ module.exports = class {
         this.playerAskedToPickCatagory = null;
         this.isChanging = false;
 
+        this.gameMax = 10;
+        this.gameIndex = 0;
+
         this.playerIndex = 0;
-        this.roundTimer = 10;
+        this.roundTimer = config.get("gamemode.skribbl.Timer.roundTimer");
     }
 
     onGameStart() {
@@ -45,10 +57,11 @@ module.exports = class {
     sendOutCatagory() {
         const players = this.gameServer.players;
         const randomPlayer = players[this.playerIndex];
+        const drawings = this.drawings.sort(() => Math.random() - Math.random()).slice(0, 3);
 
         this.playerAskedToPickCatagory = randomPlayer;
 
-        randomPlayer.sendPacket(new Packets.Catagory(this.drawings));
+        randomPlayer.sendPacket(new Packets.Catagory(drawings));
         
         // Filter through the players that are not picked and send them the awaiting
         // screen so that they know whats happening
@@ -58,11 +71,23 @@ module.exports = class {
         });
     }
 
+    containsBannedWord(msg) {
+        let banned = false;
+        this.bannedWords.forEach(word => {
+            banned = msg.toLowerCase().includes(word);
+        });
+        return banned;
+    }
+
     onChatMessage(player, msg) {
         msg = msg.split("\u0000").join("")
 
         if (msg.length == 0 || msg.length > 30) return;
         if (player.id == this.playerAskedToPickCatagory.id) return;
+
+        if (this.bannedWords.some(v => msg.toLowerCase().includes(v.toLowerCase()))) {
+            return player.sendPacket(new Packets.ChatMessage("[SERVER]", `Message contains a banned word!`, "hsl(0deg 100% 69%)"));
+        }
 
         if (msg.toLowerCase() == this.pickedCatagory.toLowerCase()) {
             if (!this.playersCorrect.find(p => p.id == player.id)) {
@@ -80,17 +105,30 @@ module.exports = class {
                 this.playerIndex++;
 
                 if (this.playerIndex == this.gameServer.players.length) {
-                    this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
 
-                    setTimeout(() => {
-                        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                        this.gameServer.broadcast(new Packets.GameEnded());
+                    this.gameIndex++;
+
+                    if (this.gameIndex == this.gameMax) {
+                        this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
 
                         setTimeout(() => {
-                            this.gameServer.broadcast(new Packets.EndGame())
-                            this.gameServer.resetLobby();
-                        }, 5000);
-                    }, 3000);
+                            this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                            this.gameServer.broadcast(new Packets.GameEnded());
+
+                            setTimeout(() => {
+                                this.gameServer.broadcast(new Packets.EndGame())
+                                this.gameServer.resetLobby();
+                            }, 5000);
+                        }, 3000);
+                    } else {
+                        this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `New round [${this.gameIndex}/${this.gameMax}]`, "rgb(133 109 255)"))
+                        this.playerIndex = 0;
+
+                        setTimeout(() => {
+                            this.reset();
+                            this.sendOutCatagory();
+                        }, 4000);
+                    }
 
                 } else {
                     setTimeout(() => {
@@ -124,11 +162,13 @@ module.exports = class {
     newGame() {
         clearInterval(this.timer);
 
+        const letters = this.pickedCatagory.split("").map(s => s = "_ ").join("");
+
         this.gameServer.broadcast(new Packets.ResetScreen());
         this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
 
         this.gameServer.players.filter(player => player.id != this.playerAskedToPickCatagory.id).forEach((player) => {
-            player.sendPacket(new Packets.ChatMessage("[SERVER]", "Type a word to guess", "rgb(133 109 255)"));
+            player.sendPacket(new Packets.ChatMessage("[SERVER]", `The word to guess is: ${letters}`, "rgb(133 109 255)"));
         });
         
         this.playerAskedToPickCatagory.sendPacket(new Packets.ChatMessage("[SERVER]", "The word to draw is: " + this.pickedCatagory, "rgb(133 109 255)"))
@@ -152,18 +192,34 @@ module.exports = class {
                         this.playerIndex++;
 
                         if (this.playerIndex == this.gameServer.players.length) {
-                            this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game has ended as everyone has drawn!`, "rgb(133 109 255)"))
-                            setTimeout(() => {
-                                this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                                this.gameServer.broadcast(new Packets.GameEnded());
 
+                            this.gameIndex++;
+        
+                            if (this.gameIndex == this.gameMax) {
+                                this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
+        
                                 setTimeout(() => {
-                                    this.gameServer.broadcast(new Packets.EndGame())
-                                    this.gameServer.resetLobby();
-                                }, 5000);
-                            }, 3000);
+                                    this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                                    this.gameServer.broadcast(new Packets.GameEnded());
+        
+                                    setTimeout(() => {
+                                        this.gameServer.broadcast(new Packets.EndGame())
+                                        this.gameServer.resetLobby();
+                                    }, 5000);
+                                }, 3000);
+                            } else {
+                                this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `New round [${this.gameIndex}/${this.gameMax}]`, "rgb(133 109 255)"))
+                                this.playerIndex = 0;
+        
+                                setTimeout(() => {
+                                    this.reset();
+                                    this.sendOutCatagory();
+                                }, 4000);
+                            }
+        
                         } else {
                             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", "The word was: " + this.pickedCatagory, "rgb(133 109 255)"))
+                            
                             setTimeout(() => {
                                 this.reset();
                                 this.sendOutCatagory();
