@@ -71,14 +71,6 @@ module.exports = class {
         });
     }
 
-    containsBannedWord(msg) {
-        let banned = false;
-        this.bannedWords.forEach(word => {
-            banned = msg.toLowerCase().includes(word);
-        });
-        return banned;
-    }
-
     onChatMessage(player, msg) {
         msg = msg.split("\u0000").join("")
 
@@ -107,34 +99,13 @@ module.exports = class {
                 if (this.playerIndex == this.gameServer.players.length) {
 
                     this.gameIndex++;
-
-                    if (this.gameIndex == this.gameMax) {
-                        this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
-
-                        setTimeout(() => {
-                            this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                            this.gameServer.broadcast(new Packets.GameEnded());
-
-                            setTimeout(() => {
-                                this.gameServer.broadcast(new Packets.EndGame())
-                                this.gameServer.resetLobby();
-                            }, 5000);
-                        }, 3000);
-                    } else {
-                        this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `New round [${this.gameIndex}/${this.gameMax}]`, "rgb(133 109 255)"))
-                        this.playerIndex = 0;
-
-                        setTimeout(() => {
-                            this.reset();
-                            this.sendOutCatagory();
-                        }, 4000);
-                    }
+                    this.checkGameIndex();
 
                 } else {
                     setTimeout(() => {
                         this.reset();
                         this.sendOutCatagory();
-                    }, 4000);
+                    }, config.get("gamemode.skribbl.Timer.newRound"));
                 }
             } else {
                 player.sendPacket(new Packets.ChatMessage("[SERVER]", `You guessed the correct word! Waiting for the others. [${players}]`, "rgb(133 109 255)"))
@@ -156,6 +127,30 @@ module.exports = class {
                 this.awaitingCatagory = false;
                 this.newGame();
             }
+        }
+    }
+
+    checkGameIndex() {
+        if (this.gameIndex == this.gameMax) {
+            this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
+
+            setTimeout(() => {
+                this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+                this.gameServer.broadcast(new Packets.GameEnded());
+
+                setTimeout(() => {
+                    this.gameServer.broadcast(new Packets.EndGame())
+                    this.gameServer.resetLobby();
+                }, config.get("gamemode.skribbl.Timer.endGame"));
+            }, config.get("gamemode.skribbl.Timer.endGameLeaderboard"));
+        } else {
+            this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `New round [${this.gameIndex}/${this.gameMax}]`, "rgb(133 109 255)"))
+            this.playerIndex = 0;
+
+            setTimeout(() => {
+                this.reset();
+                this.sendOutCatagory();
+            }, config.get("gamemode.skribbl.Timer.newRound"));
         }
     }
 
@@ -194,28 +189,7 @@ module.exports = class {
                         if (this.playerIndex == this.gameServer.players.length) {
 
                             this.gameIndex++;
-        
-                            if (this.gameIndex == this.gameMax) {
-                                this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
-        
-                                setTimeout(() => {
-                                    this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                                    this.gameServer.broadcast(new Packets.GameEnded());
-        
-                                    setTimeout(() => {
-                                        this.gameServer.broadcast(new Packets.EndGame())
-                                        this.gameServer.resetLobby();
-                                    }, 5000);
-                                }, 3000);
-                            } else {
-                                this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `New round [${this.gameIndex}/${this.gameMax}]`, "rgb(133 109 255)"))
-                                this.playerIndex = 0;
-        
-                                setTimeout(() => {
-                                    this.reset();
-                                    this.sendOutCatagory();
-                                }, 4000);
-                            }
+                            this.checkGameIndex();
         
                         } else {
                             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", "The word was: " + this.pickedCatagory, "rgb(133 109 255)"))
@@ -223,7 +197,7 @@ module.exports = class {
                             setTimeout(() => {
                                 this.reset();
                                 this.sendOutCatagory();
-                            }, 4000);
+                            }, config.get("gamemode.skribbl.Timer.newRound"));
                         }
                     }
                 }, 500)

@@ -30,6 +30,8 @@ class GameServer {
 
         logger = log4js.getLogger("GAMESERVER " + this.id);
         logger.level = "debug";
+
+        logger.debug("Server is running on port: " + port);
     }
 
     getPlayer = (ip) => this.players.find(user => user.ip == ip);
