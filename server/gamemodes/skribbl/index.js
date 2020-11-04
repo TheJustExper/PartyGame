@@ -97,10 +97,8 @@ module.exports = class {
                 this.playerIndex++;
 
                 if (this.playerIndex == this.gameServer.players.length) {
-
                     this.gameIndex++;
                     this.checkGameIndex();
-
                 } else {
                     setTimeout(() => {
                         this.reset();
@@ -130,6 +128,23 @@ module.exports = class {
         }
     }
 
+    newGame() {
+        clearInterval(this.timer);
+
+        const letters = this.pickedCatagory.split("").map(s => s = "_ ").join("");
+
+        this.gameServer.broadcast(new Packets.ResetScreen());
+        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+
+        this.gameServer.players.filter(player => player.id != this.playerAskedToPickCatagory.id).forEach((player) => {
+            player.sendPacket(new Packets.ChatMessage("[SERVER]", `The word to guess is: ${letters}`, "rgb(133 109 255)"));
+        });
+        
+        this.playerAskedToPickCatagory.sendPacket(new Packets.ChatMessage("[SERVER]", "The word to draw is: " + this.pickedCatagory, "rgb(133 109 255)"))
+
+        this.startTimer();
+    }
+
     checkGameIndex() {
         if (this.gameIndex == this.gameMax) {
             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
@@ -154,24 +169,11 @@ module.exports = class {
         }
     }
 
-    newGame() {
-        clearInterval(this.timer);
-
-        const letters = this.pickedCatagory.split("").map(s => s = "_ ").join("");
-
-        this.gameServer.broadcast(new Packets.ResetScreen());
-        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-
-        this.gameServer.players.filter(player => player.id != this.playerAskedToPickCatagory.id).forEach((player) => {
-            player.sendPacket(new Packets.ChatMessage("[SERVER]", `The word to guess is: ${letters}`, "rgb(133 109 255)"));
-        });
-        
-        this.playerAskedToPickCatagory.sendPacket(new Packets.ChatMessage("[SERVER]", "The word to draw is: " + this.pickedCatagory, "rgb(133 109 255)"))
-
+    startTimer() {
         let time = this.roundTimer;
 
         this.gameServer.broadcast(new Packets.RoundTimer(time));
-
+        
         this.timer = setInterval(() => {
             time--;
 
