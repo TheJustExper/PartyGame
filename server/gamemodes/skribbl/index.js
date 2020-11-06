@@ -74,7 +74,7 @@ module.exports = class {
     onChatMessage(player, msg) {
         msg = msg.split("\u0000").join("")
 
-        if (msg.length == 0 || msg.length > 30) return;
+        if (msg.length == 0 || msg.length > 100) return;
         if (player.id == this.playerAskedToPickCatagory.id) return;
 
         if (this.bannedWords.some(v => msg.toLowerCase().includes(v.toLowerCase()))) {
@@ -158,6 +158,7 @@ module.exports = class {
                     this.gameServer.resetLobby();
                 }, config.get("gamemode.skribbl.Timer.endGame"));
             }, config.get("gamemode.skribbl.Timer.endGameLeaderboard"));
+            
         } else {
             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `New round [${this.gameIndex}/${this.gameMax}]`, "rgb(133 109 255)"))
             this.playerIndex = 0;

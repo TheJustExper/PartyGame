@@ -184,8 +184,7 @@ module.exports = class {
                 clearInterval(this.timer);
                 setTimeout(() => {
                     if (!this.isChanging) {
-                        this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                        this.newGame()
+                        this.checkRounds();
                     }
                 }, 500)
             };
@@ -221,22 +220,26 @@ module.exports = class {
                     });
     
                     setTimeout(() => {
-                        if (this.roundsPlayed < this.roundsMax) {
-                            this.roundsPlayed++;
-                            this.newGame();
-                            this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                        } else {
-                            this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
-                            this.gameServer.broadcast(new Packets.GameEnded());
-                            setTimeout(() => {
-                                this.gameServer.broadcast(new Packets.EndGame())
-                                this.gameServer.resetLobby();
-                                this.reset();
-                            }, config.get("gamemode.trivia.Timer.gameEnd"));
-                        }
+                        this.checkRounds();
                     }, config.get("gamemode.trivia.Timer.roundEnd"));
                 }, config.get("gamemode.trivia.Timer.recieveAnswers"));
             }
+        }
+    }
+
+    checkRounds() {
+        if (this.roundsPlayed < this.roundsMax) {
+            this.roundsPlayed++;
+            this.newGame();
+            this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+        } else {
+            this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
+            this.gameServer.broadcast(new Packets.GameEnded());
+            setTimeout(() => {
+                this.gameServer.broadcast(new Packets.EndGame())
+                this.gameServer.resetLobby();
+                this.reset();
+            }, config.get("gamemode.trivia.Timer.gameEnd"));
         }
     }
 

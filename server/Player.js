@@ -52,14 +52,9 @@ class Player {
                 this.nickname = username.replace(/ /g, '');
                 
                 this.game.broadcast(new Packets.PlayerList(this.game.players));
-                
                 break;
             case 1:
-                // if (this.game.state == "LOBBY") {
-                //     if (this.game.players.length >= 2) {
-                //         this.game.startGame();
-                //     }
-                // }
+                // Player Game start button click action
                 break;
             case 2:
                 const id = msg.readUInt8();
