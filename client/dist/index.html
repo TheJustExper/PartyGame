@@ -1,94 +1,71 @@
 <html>
-    <head>
-        <script src="main.js"></script>
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-        />
-    </head>
-    <body>
-        <div id="main">
-            <div id="fade"></div>
-                <div id="serverList">
-                <div class="header">
-                    <h1>SERVER LIST</h1>
-                    <span id="serverClose">X</span>
-                </div>
-                <div class="inner">
-                        <div class="servers">
-                            <div id="server-1" ip="ws://localhost:5050" class="server">
-                                <div class="players">0/10</div>
-                                <div class="box">
-                                    <h1>TRIVIA</h1>
-                                </div>
-                                <h1 id="join">JOIN</h1>
-                            </div>
-                            <div id="server-1" ip="ws://localhost:5050" class="server">
-                                <div class="players">0/10</div>
-                                <div class="box">
-                                    <h1>TRIVIA</h1>
-                                </div>
-                                <h1 id="join">JOIN</h1>
-                            </div>
-                            <div id="server-1" ip="ws://localhost:5050" class="server">
-                                <div class="players">0/10</div>
-                                <div class="box">
-                                    <h1>TRIVIA</h1>
-                                </div>
-                                <h1 id="join">JOIN</h1>
-                            </div>
-                            <div id="server-1" ip="ws://localhost:5050" class="server">
-                                <div class="players">0/10</div>
-                                <div class="box">
-                                    <h1>TRIVIA</h1>
-                                </div>
-                                <h1 id="join">JOIN</h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <div class="container" id="profile">
-                <div class="header">
-                    <div class="side">
-                        <img id="profileImg" src="https://image.freepik.com/free-vector/flying-slice-pizza-cartoon-vector-illustration-fast-food-concept-isolated-vector-flat-cartoon-style_138676-1934.jpg"/>
-                        <div class="text">
-                            <h1>Exper</h1>
-                            <b>Level: <span style="color: #00FF9D;">9</span></b>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom">
-                    <div class="buttons">
-                        <div class="button">Shop<div class="slide"></div></div>
-                        <div class="button">Stats<div class="slide"></div></div>
-                        <div class="button"><div class="slide"></div></div>
-                        <div class="button"><div class="slide"></div></div>
-                    </div>
-                </div>
+
+<head>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+    <div id="main">
+        <div id="fade"></div>
+        <div id="settings" class="popup">
+            <div class="header">
+                <h1>Settings</h1>
+                <span class="exit">X</span>
             </div>
-            <div class="container">
-                <div class="sections" id="servers">
-                    <div class="text">
-                        <h1>SERVERS</h1>
-                        <p>SERVER LIST</p>
+        </div>
+        <div id="serverList" class="popup">
+            <div class="header">
+                <h1>Server list</h1>
+                <span class="exit">X</span>
+            </div>
+            <div class="inner">
+                <div class="servers">
+                    <div id="server-1" ip="ws://localhost:5050" class="server">
+                        <div class="players">0/10</div>
+                        <div class="box">
+                            <h1>Trivia</h1>
+                        </div>
+                        <h1 id="join">JOIN</h1>
                     </div>
-                    <div class="slide"></div>
-                </div>
-                <div class="sections">
-                    <div class="text">
-                        <h1>LEADERBOARD</h1>
-                        <p>TOP PLAYERS</p>
+                    <div id="server-1" ip="ws://localhost:5050" class="server">
+                        <div class="players">0/10</div>
+                        <div class="box">
+                            <h1>Skribbl</h1>
+                        </div>
+                        <h1 id="join">JOIN</h1>
                     </div>
-                    <div class="slide"></div>
-                </div>
-                <div class="sections">
-                    <div class="text">
-                        <h1>SETTINGS</h1>
-                        <p>CHANGE CLIENT SETTINGS</p>
-                    </div>
-                    <div class="slide"></div>
                 </div>
             </div>
         </div>
-    </body>
+        <div class="container inactive" id="profile">
+            <h1>CREATE AN ACCOUNT OR LOGIN TO SAVE YOUR STATS</h1>
+            <button class="login" id="login">LOGIN</button>
+        </div>
+        <div class="container">
+            <div class="sections button" id="servers">
+                <div class="text">
+                    <h1>SERVERS</h1>
+                    <p>SERVER LIST</p>
+                </div>
+                <div class="slide"></div>
+            </div>
+            <div class="sections button">
+                <div class="text">
+                    <h1>LEADERBOARD</h1>
+                    <p>TOP PLAYERS</p>
+                </div>
+                <div class="slide"></div>
+            </div>
+            <div class="sections button" id="settingsButton">
+                <div class="text">
+                    <h1>SETTINGS</h1>
+                    <p>CHANGE CLIENT SETTINGS</p>
+                </div>
+                <div class="slide"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

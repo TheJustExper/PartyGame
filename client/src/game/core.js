@@ -5,8 +5,9 @@ import MenuDesign from "./utils/MenuDesign";
 import Trivia from "./games/Trivia";
 import Skribbl from "./games/Skribbl";
 
-import Music from "./audio/music_zapsplat_quiz_bed_concentration.mp3";
+import Music from "./audio/menu/music.mp3";
 import Win from "./audio/win.mp3";
+import Clicked from "./audio/buttons/clicked.mp3";
 
 window.DEBUG = true;
 
@@ -37,27 +38,59 @@ export default class {
 
         this.audio = {
             music: new Audio(Music),
-            win: new Audio(Win)
+            win: new Audio(Win),
+            buttonClick: new Audio(Clicked)
         }
 
         this.setup();
+
+        this.audio.music.muted = true;
+
+        document.body.addEventListener("mousedown", function () {
+            if (window.core.audio.music.muted) {
+                window.core.audio.music.muted = false;
+                window.core.audio.music.volume = 0.1;
+               // window.core.audio.music.play();
+            }
+        })
+    }
+
+    setupSettings() {
+        const fade = document.getElementById("fade");
+        const settings = document.getElementById("settings");
+        const button = document.getElementById("settingsButton");
+        
+        button.onclick = () => {
+            const close = document.querySelector("#settings .exit");
+
+            fade.style.display = "block";
+            settings.style.display = "block";
+
+            close.onclick = () => (fade.style.display = "none", settings.style.display = "none");
+        }
     }
 
     setup() {
+        this.setupSettings();
+
         const servers = document.getElementById("servers");
         const fade = document.getElementById("fade");
         const serverList = document.getElementById("serverList");
+        const login = document.getElementById("login");
+
+        login.onclick = () => {
+            document.getElementById("profile").outerHTML = this.getProfile();
+        }
 
         servers.onclick = () => {
-            const close = document.getElementById("serverClose");
+            const close = document.querySelector("#serverList .exit");
 
-            fade.style = "display: block";
-            serverList.style = "display: block";
+            fade.style.display = "block";
+            serverList.style.display = "block";
 
-            close.onclick = () => {
-                fade.style = "display: none";
-                serverList.style = "display: none";
-            }
+            close.onclick = () => (fade.style.display = "none", serverList.style.display = "none");
+
+            window.core.audio.buttonClick.play();
         }
 
         const serverL = document.querySelector(".server #join")
@@ -65,6 +98,7 @@ export default class {
         serverL.onclick = (data) => {
             let ip = data.target.parentElement.getAttribute("ip");
             this.socket = new GameSocket(this, ip);
+            window.core.audio.buttonClick.play();
         }
     }
 
@@ -75,6 +109,7 @@ export default class {
     playButtonClicked() {
         this.username = document.getElementById("username").value;
         this.lobby = document.querySelector(".lobby");
+        window.core.audio.buttonClick.play();
     }
 
     setLeaderboard(players) {
@@ -165,6 +200,7 @@ export default class {
 
         play.onclick = () => {
             window.core.playButtonClicked();
+            window.core.audio.buttonClick.play();
             window.core.socket.sendUsername(username.value);
         }
     }
@@ -231,8 +267,8 @@ export default class {
     setPlayers(players) {
         this.lobby.innerHTML = "";
         this.players = players;
-        this.players.forEach(({ id, name}) => {
-            this.lobby.innerHTML += `<div class="player"><b style="color: #8C9399; margin-right: 15px;">ID: <span style="color: gold; margin-left: 5px;">${id}</span></b><b> ${name.toUpperCase()}</b></div>`;
+        this.players.forEach(({ color, name, rank }) => {
+            this.lobby.innerHTML += `<div class="player"><b style="color: #8C9399; margin-right: 15px;"><span style="color: ${color}; margin-left: 5px;">[${rank}]</span></b><b> ${name.toUpperCase()}</b></div>`;
         });
     }
 
@@ -244,6 +280,28 @@ export default class {
             this.socket.sendAnswer(index)
             this.sentAnswer = index; 
         }
+    }
+
+    getProfile() {
+        return `<div class="container" id="profile">
+        <div class="header">
+            <div class="side">
+                <img id="profileImg" src="https://image.freepik.com/free-vector/flying-slice-pizza-cartoon-vector-illustration-fast-food-concept-isolated-vector-flat-cartoon-style_138676-1934.jpg"/>
+                <div class="text">
+                    <h1>Exper</h1>
+                    <b>Level: <span style="color: #00FF9D;">9</span></b>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="buttons">
+                <div class="button">Shop</div>
+                <div class="button">Stats</div>
+                <div class="button">...</div>
+                <div class="button">...</div>
+            </div>
+        </div>
+    </div>`;
     }
 
     resetLobby() {

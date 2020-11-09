@@ -2,7 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
  :root {
-     --regular-color: rgb(133 109 255);
+     --regular-color: linear-gradient(90deg,#ff0098 0%,#ff00f7 100%);
+     --regular-color-flat: #ff0098;
      --ui-scale: 1;
      --shadow: 0 0 0 calc(1.5px*var(--ui-scale)) #121418, 0 calc(3px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) #121418, calc(-4.5px*var(--ui-scale)) calc(6px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) rgba(0, 0, 0, .1);
  }
@@ -13,6 +14,27 @@
      padding: 0;
      text-shadow: 0.07em 0.07em 0 rgba(15, 18, 23, .9), -0.07em 0.07em 0 rgba(15, 18, 23, .9), 0.07em -0.07em 0 rgba(15, 18, 23, .9), -0.07em -0.07em 0 rgba(15, 18, 23, .9), 0 0.0798em 0 rgba(15, 18, 23, .9), 0 -0.0798em 0 rgba(15, 18, 23, .9), 0.0798em 0 0 rgba(15, 18, 23, .9), -0.0798em 0 0 rgba(15, 18, 23, .9), 0 0.0998em 0 rgba(15, 18, 23, .9), 0.0798em 0.0998em 0 rgba(15, 18, 23, .9), -0.0798em 0.0998em 0 rgba(15, 18, 23, .9), 0 0.1398em 0 rgba(15, 18, 23, .9), 0.0798em 0.1398em 0 rgba(15, 18, 23, .9), -0.0798em 0.1398em 0 rgba(15, 18, 23, .9), -0.2em 0.13em 0 rgba(17, 17, 17, .25);
  }
+
+ @-webkit-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-moz-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@-o-keyframes rainbow {
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
+@keyframes rainbow { 
+    0%{background-position:0% 82%}
+    50%{background-position:100% 19%}
+    100%{background-position:0% 82%}
+}
 
  body {
      display: flex;
@@ -799,38 +821,6 @@
      }
  }
 
- #serverList {
-    background-color: rgb(57 61 68);
-    width: 350px;
-    height: 350px;
-    margin-bottom: 25px;
-    box-sizing: border-box;
-    transition: .1s;
-    position: relative;
-    border-radius: 5px;
-    box-shadow: var(--shadow);
-    flex: 1 1 auto;
-    overflow: hidden;
-    transition: .2s;
-    position: absolute;
-    z-index: 3;
-    display: none;
- }
-
- #serverList .header {
-    background-color: rgb(47 52 61);
-    width: 100%;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
- }
-
- #serverList .header h1 {
-     font-size: 25px;
-     color: white;
- }
-
  #serverList .inner {
     width: 100%;
     height: calc(100% - 50px);
@@ -844,35 +834,24 @@
  #serverList .inner .servers {
     width: 100%;
     height: 100%;
-    background-color: rgb(34 37 41);
+    background-color: rgb(27 29 33);
     padding: 16px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    justify-content: space-between;
-    border: 3px solid #000000;
+    border: 1px solid #000000;
  }
 
  #serverList .inner .servers .server {
     width: 100%;
-    height: 40px;
+    height: 45px;
     background-color: rgb(62 70 81);
-    margin-bottom: 7px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     padding-right: 10px;
-    border: 2px solid #000000;
+    border: 1px solid #000000;
     box-sizing: border-box;
-    border-radius: 5px;
-
- }
-
- #serverList #serverClose {
-     color: #F9544A;
-     position: absolute;
-     top: 10px;
-     right: 18px;
-     font-size: 23px;
  }
 
  #serverList .inner .servers .server .players {
@@ -901,8 +880,12 @@
  }
 
  #serverList .inner .servers .server h1 {
-    font-size: 17px;
-    color: var(--regular-color);
+    font-size: 18px;
+    color:var(--regular-color-flat);
+ }
+
+ #serverList .inner .servers .server h1:hover {
+    color: white;
  }
 
  #fade {
@@ -932,6 +915,102 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+ }
+
+ .popup {
+    background-color: #222429;
+    width: 400px;
+    height: 350px;
+    margin-bottom: 25px;
+    box-sizing: border-box;
+    transition: .1s;
+    position: relative;
+    border-radius: 5px;
+    flex: 1 1 auto;
+    overflow: hidden;
+    transition: .2s;
+    position: absolute;
+    z-index: 3;
+    display: none;
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(0, 0, 0);
+ }
+
+ .popup .header {
+     width: 100%;
+     height: 50px;
+     border-bottom: 1px solid #000000;
+     position: relative;
+     padding-left: 20px;
+     display: flex;
+     align-items: center;
+     box-sizing: border-box;
+ }
+
+ .popup .header h1 {
+    color: white;
+    font-size: 18px;
+ }
+
+ .popup .header .exit {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 15px;
+    background-color: #383A3E;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 15px;
+ }
+
+ 
+ .popup .header .exit:hover {
+    background-color: #5a5f6a;
+    transform: scale(1.1);
+ }
+
+ .inactive {
+     background-color: #242629;
+        margin-bottom: 32px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        transition: .2s;
+        box-shadow: rgb(0, 0, 0) 0px 8px 0px;
+        border-width: 3px;
+        border-style: solid;
+        border-color: rgb(0, 0, 0);
+        display: flex;
+        justify-content: center !important;
+        align-items: center !important;
+        font-size: 12px;
+        color: white;
+ }
+
+ .inactive h1 {
+     font-size: 21px;
+     color: white;
+     text-align: center;
+     max-width: 233px;
+     font-family:  Rajdhani;
+ }
+
+ #profile .login {
+    margin-top: 10px;
+    font-size: 15px;
+    font-family:  Rajdhani;
+    width: 80px;
+    height: 40px;
+    background: var(--regular-color);
+    border: 2px solid #000000;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 0px #000000;
+    border-radius: 5px;
+    color: white;
  }
 
  #main #profile .bottom {
@@ -978,15 +1057,6 @@
     transform: scale(1.05);
     background-color: var(--regular-color);
  }
-
- #main #profile .bottom .button:hover .slide {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0px;
-    top: 45px;
-    background-color: rgba(255, 255, 255, 0.6);
-}
 
  #main #profile .header {
     background-color: rgb(47 52 61);
@@ -1080,7 +1150,7 @@
 
 #main .sections:hover {
     transform: scale(1.1);
-    background-color: var(--regular-color);
+    background: var(--regular-color);
     z-index: 2;
 }
 
@@ -1299,7 +1369,7 @@
 
  #menu .left .sections:hover {
      transform: scale(1.1);
-     background-color: var(--regular-color);
+     background: var(--regular-color);
      z-index: 2;
  }
 

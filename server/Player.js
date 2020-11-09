@@ -20,7 +20,7 @@ class Player {
         this.ws = ws;
         this.ip = ip;
         this.score = 0;
-        this.rank = "HOST";
+        this.rank = "PLAYER";
         this.nickname = "Guest";
         this.state = "USERNAME";
         this.color = this.getRandomColor();

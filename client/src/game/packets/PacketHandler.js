@@ -34,8 +34,20 @@ export default class {
 
                     const name = data.getString(offset, length);
                     offset += length;  
+                    
+                    const rankl = data.getUint8(offset);
+                    offset += 1;
 
-                    playersList.push({ id, name });
+                    const rank = data.getString(offset, rankl);
+                    offset += rankl; 
+
+                    const colorl = data.getUint8(offset);
+                    offset += 1;
+
+                    const color = data.getString(offset, colorl);
+                    offset += colorl; 
+
+                    playersList.push({ color, name, rank });
                 }
 
                 this.core.setPlayers(playersList);

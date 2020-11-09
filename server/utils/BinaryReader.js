@@ -20,7 +20,7 @@
 
 function BinaryReader(buffer) {
     this._offset = 0;
-    this._buffer = new Buffer(buffer);
+    this._buffer = new Buffer.from(buffer);
 }
 
 module.exports = BinaryReader;

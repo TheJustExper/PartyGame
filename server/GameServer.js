@@ -18,7 +18,7 @@ class GameServer {
 
         this.wss.on('connection', this.onConnection.bind(this));
 
-        this.gameType = 0;
+        this.gameType = 1;
         this.gamemodes = [Trivia, Skribbl];
         this.gamemode = new (this.gamemodes[this.gameType])(this);
 
