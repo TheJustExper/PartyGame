@@ -8,6 +8,72 @@
      --shadow: 0 0 0 calc(1.5px*var(--ui-scale)) #121418, 0 calc(3px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) #121418, calc(-4.5px*var(--ui-scale)) calc(6px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) rgba(0, 0, 0, .1);
  }
 
+ /* The container */
+.container-checkbox {
+    display: block;
+    position: absolute;
+    right: 45px;
+    top: 28px;
+    cursor: pointer;
+    font-size: 22px;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.container-checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 23px;
+    width: 23px;
+    background-color:#383A3E;
+    border-radius: 3px;
+}
+
+/* On mouse-over, add a grey background color */
+.container-checkbox:hover input ~ .checkmark {
+    background-color:#5a5f6a;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container-checkbox input:checked ~ .checkmark {
+    background: var(--regular-color);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.container-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.container-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-checkbox .checkmark:after {
+    left: 8px;
+    top: 3px;
+    width: 4px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+
  * {
     font-weight: 700;
      margin: 0;
@@ -892,7 +958,7 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.9);
     z-index: 2;
     display: none;
  }
@@ -952,6 +1018,27 @@
  .popup .header h1 {
     color: white;
     font-size: 18px;
+ }
+
+ .popup .content .setting {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    flex-direction: row;
+    border-bottom: 1px solid black;
+ }
+
+ .popup .content .setting .text b {
+    font-size: 18px;
+    color: white;
+ }
+
+ .popup .content .setting .text p {
+    font-size: 15px;
+    color: #8F9094;
  }
 
  .popup .header .exit {
@@ -1110,10 +1197,10 @@
  }
 
  #main #profile .header #profileImg {
-     width: 50px;
-     height: 50px;
+     width: 45px;
+     height: 45px;
      border-radius: 50%;
-     border: 3px solid black;
+     border: 1px solid black;
  }
 
  #main .container {
