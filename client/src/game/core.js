@@ -16,7 +16,7 @@ export default class {
         this.players = []
         this.leaderboard = []
 
-        this.socket = null; 
+        this.socket = new GameSocket(this, "ws://localhost:8080");
 
         this.menus = new MenuDesign(this);
         this.gamemodes = [new Trivia(), new Skribbl()]
@@ -40,6 +40,12 @@ export default class {
             music: new Audio(Music),
             win: new Audio(Win),
             buttonClick: new Audio(Clicked)
+        }   
+
+        this.state = {
+            account: {
+                account: localStorage.getItem("account")
+            }
         }
 
         this.setup();
@@ -70,9 +76,19 @@ export default class {
         }
     }
 
+    accountAuth() {
+        //if (this.state.account.account != null) {
+            const { username, password } = { username: "Exper", password: "test" }
+            this.socket.sendLogin(username, password);
+        //}
+    }
+
     setup() {
         this.setupSettings();
+        this.setupButtons();
+    }
 
+    setupButtons() {
         const servers = document.getElementById("servers");
         const fade = document.getElementById("fade");
         const serverList = document.getElementById("serverList");

@@ -4,6 +4,7 @@ import "./StringView"
 export default class {
     constructor(core, ip) {
         this.core = core;
+        this.ip = ip;
         this.packetHandler = new PacketHandler(core);
         this.socket = new WebSocket(ip);
         this.socket.binaryType = "arraybuffer";
@@ -27,8 +28,6 @@ export default class {
     sendMessage(message) {
         let str = this.createString(10, message);
         this.send(str);
-
-        console.log(message)
     }
 
     sendStart() {
@@ -67,8 +66,20 @@ export default class {
         this.send(buf);
     }
 
+    sendLogin(username, password) {
+        const buf = new DataView(new ArrayBuffer(10 + (username.length * 2) + (password.length * 2)));
+        buf.setUint8(0, 1);
+        for (var i = 0; i < username.length; ++i) buf.setUint16(1 + 2 * i, username.charCodeAt(i), true);
+        for (var z = 0; z < password.length; ++z) buf.setUint16(1 + (username.length * 2) + 2 * z, password.charCodeAt(z), true);
+        this.send(buf);
+    }
+
     onOpen() {
-        this.core.serverJoined();
+        this.core.accountAuth();
+
+        if (this.ip.split(":")[2] != "8080") {
+            this.core.serverJoined();
+        }
     }
 
     onceUsernameIsSent() {

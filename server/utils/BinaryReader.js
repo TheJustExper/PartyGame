@@ -88,7 +88,7 @@ BinaryReader.prototype.readStringUtf8 = function (length) {
     length = Math.max(0, length);
     var value = this._buffer.toString('utf8', this._offset, this._offset + length);
     this._offset += length;
-    return value;
+    return value.split("\u0000").join("");
 };
 
 BinaryReader.prototype.readStringUnicode = function (length) {

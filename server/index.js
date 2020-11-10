@@ -17,14 +17,14 @@ db.connect(() => {
         logger.debug("New connection to the Main server");
 
         ws.onmessage = (message) => {
-            let msg = new BinaryReader(message);
+            let msg = new BinaryReader(message.data);
 
-            switch(msg.getUint8()) {
+            switch(msg.readUInt8()) {
                 case 1:
-                    const username = msg.readStringUtf8();
+                    const username = msg.readStringUtf8(9);
                     const password = msg.readStringUtf8();
 
-                    console.log(username, password);
+                    console.log(`name: ${username} password: ${password}`);
                     break;
 
             }   
