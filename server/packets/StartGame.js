@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function StartGame(timer) {
     this.timer = timer;
@@ -7,9 +7,12 @@ function StartGame(timer) {
 module.exports = StartGame;
 
 StartGame.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(2);
-    writer.writeUInt8(this.timer);
+    const buf = msgpack.encode({
+        opcode: 2,
+        data: {
+            timer: this.timer
+        }
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

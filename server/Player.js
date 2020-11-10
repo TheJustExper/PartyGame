@@ -3,7 +3,7 @@ const log4js = require("log4js");
 const logger = log4js.getLogger("PLAYER");
 const { PacketType } = require("./packets/packets");
 const shortid = require('shortid');
-const BinaryReader = require("./utils/BinaryReader");
+const msgpack = require("msgpack-lite");
 const Packets = require("./packets/packets");
 
 logger.level = "debug";
@@ -44,12 +44,12 @@ class Player {
     }
 
     handleMessage(message) {
-        const msg = new BinaryReader(message);
+        const msg = msgpack.decode(message);
         
-        switch(msg.readUInt8()) {
+        switch(msg.opcode) {
             case 0:
-                const username = msg.readStringUtf8();
-                this.nickname = username.replace(/ /g, '');
+                const { username } = msg.data;
+                this.nickname = username;
                 
                 this.game.broadcast(new Packets.PlayerList(this.game.players));
                 break;
@@ -57,18 +57,15 @@ class Player {
                 // Player Game start button click action
                 break;
             case 2:
-                const id = msg.readUInt8();
+                const { id } = msg.data;
                 this.game.gamemode.onAnswer(this, id);
                 break;
             case 3:
-                const catagory = msg.readUInt8();
+                const { catagory } = msg.data;
                 this.game.gamemode.onPickedCatagory(this, catagory);
                 break;
             case 4:
-                const x1 = msg.readUInt16();
-                const y1 = msg.readUInt16();
-                const x2 = msg.readUInt16();
-                const y2 = msg.readUInt16();
+                const [ x1, y1, x2, y2 ] = msg.data.position;
 
                 this.game.gamemode.onDraw(this, x1, y1, x2, y2);
                 break;
@@ -76,7 +73,7 @@ class Player {
                 this.game.gamemode.resetBoard(this);
                 break;
             case 10:
-                let message = msg.readStringUtf8();
+                let { message } = msg.data;
                 this.game.gamemode.onChatMessage(this, message);
                 break;
         }

@@ -15,4 +15,5 @@ export default {
     ResetScreen: 13,
     DrawPixel: 14,
     ResetBoard: 15,
+    AccountInfo: 16,
 }

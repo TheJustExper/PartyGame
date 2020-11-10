@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function GameEnded(players) {
     this.players = players;
@@ -7,8 +7,10 @@ function GameEnded(players) {
 module.exports = GameEnded;
 
 GameEnded.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(8);
+    const buf = msgpack.encode({
+        opcode: 8,
+        data: {}
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

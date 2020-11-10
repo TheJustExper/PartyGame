@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function ChatMessage(sender, message, color) {
     this.sender = sender;
@@ -9,15 +9,14 @@ function ChatMessage(sender, message, color) {
 module.exports = ChatMessage;
 
 ChatMessage.prototype.build = function () {
-    const writer = new BinaryWriter();
-    
-    writer.writeUInt8(10);
-    writer.writeUInt8(this.sender.length);
-    writer.writeStringUtf8(this.sender);
-    writer.writeUInt8(this.message.length);
-    writer.writeStringUtf8(this.message);
-    writer.writeUInt8(this.color.length);
-    writer.writeStringUtf8(this.color);
+    const buf = msgpack.encode({
+        opcode: 10,
+        data: {
+            username: this.sender,
+            color: this.color,
+            message: this.message,
+        }
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

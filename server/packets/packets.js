@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 const GameType = require("./GameType");
 const ChatMessage = require("./ChatMessage");
@@ -16,6 +16,7 @@ const AwaitingCatagory = require("./AwaitingCatagory");
 const ResetScreen = require("./ResetScreen");
 const DrawPixel = require("./DrawPixel");
 const ResetBoard = require("./ResetBoard");
+const AccountInfo = require("./AccountInfo");
 
 module.exports = {
     GameType,
@@ -34,4 +35,5 @@ module.exports = {
     ResetScreen,
     DrawPixel,
     ResetBoard,
+    AccountInfo,
 }

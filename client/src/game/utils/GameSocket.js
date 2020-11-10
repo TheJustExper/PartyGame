@@ -13,21 +13,22 @@ export default class {
         this.socket.onmessage = this.onMessage.bind(this);
     }
 
-    createString(opcode, str) {
-        var msg = new DataView(new ArrayBuffer(1 + str.length * 2));
-        msg.setUint8(0, opcode);
-        for (var i = 0; i < str.length; ++i) msg.setUint16(1 + 2 * i, str.charCodeAt(i), true);
-        return msg;
-    }
+    sendUsername(username) {
+        const buf = msgpack.encode({ 
+            opcode: 0, 
+            data: { username }
+        });
 
-    sendUsername(name) {
-        let str = this.createString(0, name);
-        this.send(str);
+        this.send(buf);
     }
 
     sendMessage(message) {
-        let str = this.createString(10, message);
-        this.send(str);
+        const buf = msgpack.encode({ 
+            opcode: 10, 
+            data: { message }
+        });
+
+        this.send(buf);
     }
 
     sendStart() {
@@ -37,40 +38,52 @@ export default class {
     }
 
     sendAnswer(index) {
-        const buf = new DataView(new ArrayBuffer(2));
-        buf.setUint8(0, 2);
-        buf.setUint8(1, index)
+        const buf = msgpack.encode({ 
+            opcode: 2, 
+            data: { id: index }
+        });
+
         this.send(buf);
     }
 
     sendCatagory(catagory) {
-        const buf = new DataView(new ArrayBuffer(2));
-        buf.setUint8(0, 3);
-        buf.setUint8(1, catagory)
+        const buf = msgpack.encode({ 
+            opcode: 3, 
+            data: { catagory }
+        });
+
         this.send(buf);
     }
 
     sendPixel(x1, y1, x2, y2) {
-        const buf = new DataView(new ArrayBuffer(9));
-        buf.setUint8(0, 4);
-        buf.setUint16(1, x1)
-        buf.setUint16(3, y1)
-        buf.setUint16(5, x2)
-        buf.setUint16(7, y2)
+        const buf = msgpack.encode({ 
+            opcode: 4, 
+            data: { 
+                position: [x1, y1, x2, y2]
+             }
+        });
+
         this.send(buf);
     }
 
     sendResetBoard() {
-        const buf = new DataView(new ArrayBuffer(1));
-        buf.setUint8(0, 5);
+        const buf = msgpack.encode({ 
+            opcode: 5, 
+            data: {}
+        });
+
         this.send(buf);
     }
 
     sendLogin(username, password) {
-        const buf = new DataView(new ArrayBuffer(10 + (username.length * 2) + (password.length * 2)));
-        buf.setUint8(0, 1);
-        for (var i = 0; i < username.length; ++i) buf.setUint16(1 + 2 * i, username.charCodeAt(i), true);
-        for (var z = 0; z < password.length; ++z) buf.setUint16(1 + (username.length * 2) + 2 * z, password.charCodeAt(z), true);
+        const buf = msgpack.encode({ 
+            opcode: 1, 
+            data: {
+                username,
+                password,
+            }
+        });
+
         this.send(buf);
     }
 

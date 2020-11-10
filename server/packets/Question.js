@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function SendQuestion(question) {
     this.question = question;
@@ -7,16 +7,13 @@ function SendQuestion(question) {
 module.exports = SendQuestion;
 
 SendQuestion.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(5);
-    writer.writeUInt8(this.question.question.length);
-    writer.writeStringUtf8(this.question.question)
-    writer.writeUInt8(this.question.answers.length);
-
-    this.question.answers.forEach(question => {
-        writer.writeUInt8(question.length);
-        writer.writeStringUtf8(question);
+    const buf = msgpack.encode({
+        opcode: 5,
+        data: {
+            question: this.question.question,
+            answers: this.question.answers
+        }
     });
 
-    return writer.toBuffer();
+    return buf;
 };

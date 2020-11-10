@@ -1,12 +1,14 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function ResetBoard() {}
 
 module.exports = ResetBoard;
 
 ResetBoard.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(15);
+    const buf = msgpack.encode({
+        opcode: 15,
+        data: {}
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

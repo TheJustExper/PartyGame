@@ -1,12 +1,14 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function EndGame() {}
 
 module.exports = EndGame;
 
 EndGame.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(4);
+    const buf = msgpack.encode({
+        opcode: 4,
+        data: {}
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

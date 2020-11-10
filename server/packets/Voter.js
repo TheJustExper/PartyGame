@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function SendVoter(color) {
     this.color = color;
@@ -7,10 +7,12 @@ function SendVoter(color) {
 module.exports = SendVoter;
 
 SendVoter.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(7);
-    writer.writeUInt8(this.color.length);
-    writer.writeStringUtf8(this.color);
+    const buf = msgpack.encode({
+        opcode: 7,
+        data: {
+            color: this.color
+        }
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

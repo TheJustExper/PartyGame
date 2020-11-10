@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function GameType(type) {
     this.type = type;
@@ -7,10 +7,12 @@ function GameType(type) {
 module.exports = GameType;
 
 GameType.prototype.build = function () {
-    const writer = new BinaryWriter();
+    const buf = msgpack.encode({
+        opcode: 0,
+        data: {
+            type: this.type
+        }
+    });
 
-    writer.writeUInt8(0);
-    writer.writeUInt8(this.type)
-
-    return writer.toBuffer();
+    return buf;
 };

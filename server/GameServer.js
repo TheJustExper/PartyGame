@@ -3,6 +3,7 @@ const log4js = require("log4js");
 const Player = require("./Player");
 const Packets = require("./packets/packets");
 const BinaryReader = require("./utils/BinaryReader");
+const msgpack = require("msgpack-lite");
 const config = require("config");
 
 const Trivia = require("./gamemodes/trivia/Trivia");
@@ -18,7 +19,7 @@ class GameServer {
 
         this.wss.on('connection', this.onConnection.bind(this));
 
-        this.gameType = 1;
+        this.gameType = 0;
         this.gamemodes = [Trivia, Skribbl];
         this.gamemode = new (this.gamemodes[this.gameType])(this);
 
@@ -57,14 +58,14 @@ class GameServer {
             let player = null;
             
             ws.onmessage = (message) => {
-                const msg = new BinaryReader(message.data);
+                const msg = msgpack.decode(message.data);
                 
-                switch(msg.readUInt8()) {
+                switch(msg.opcode) {
                     case 0:
-                        const username = msg.readStringUtf8();
+                        const { username } = msg.data;
                         const playerObj = new Player({ ip, ws, game: this });
 
-                        playerObj.nickname = username.replace(/ /g, '');
+                        playerObj.nickname = username;
                         player = playerObj;
 
                         this.players.push(playerObj);

@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function RoundTimer(time) {
     this.time = time;
@@ -7,9 +7,12 @@ function RoundTimer(time) {
 module.exports = RoundTimer;
 
 RoundTimer.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(9);
-    writer.writeUInt8(this.time);
+    const buf = msgpack.encode({
+        opcode: 9,
+        data: {
+            timer: this.time
+        }
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function RoundEnd(answer) {
     this.answer = answer;
@@ -7,9 +7,12 @@ function RoundEnd(answer) {
 module.exports = RoundEnd;
 
 RoundEnd.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(6);
-    writer.writeUInt8(this.answer);
+    const buf = msgpack.encode({
+        opcode: 6,
+        data: {
+            answer: this.answer
+        }
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

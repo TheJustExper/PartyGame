@@ -21,20 +21,19 @@ export default class {
         this.menus = new MenuDesign(this);
         this.gamemodes = [new Trivia(), new Skribbl()]
 
-        this.gamemode = null;
-
         this.trivia = {}
-        this.sentAnswer = null;
-        
-        this.gameType = null;
 
+        this.gamemode = null;
+        this.sentAnswer = null;
+        this.gameType = null;
         this.timer = null;
         this.lobby = null;
+        this.timer = null;
+        this.selectedPopup = null;
 
         this.state = "LOBBY";
 
         this.roundTime = 0;
-        this.timer = null;
 
         this.audio = {
             music: new Audio(Music),
@@ -56,24 +55,21 @@ export default class {
             if (window.core.audio.music.muted) {
                 window.core.audio.music.muted = false;
                 window.core.audio.music.volume = 0.1;
-               // window.core.audio.music.play();
+                window.core.audio.music.play();
             }
         })
     }
 
+    setup() {
+        this.setupSettings();
+        this.setupButtons();
+    }
+
     setupSettings() {
-        const fade = document.getElementById("fade");
         const settings = document.getElementById("settings");
         const button = document.getElementById("settingsButton");
         
-        button.onclick = () => {
-            const close = document.querySelector("#settings .exit");
-
-            fade.style.display = "block";
-            settings.style.display = "block";
-
-            close.onclick = () => (fade.style.display = "none", settings.style.display = "none");
-        }
+        button.onclick = () => this.buttonClick(settings);
     }
 
     accountAuth() {
@@ -83,31 +79,25 @@ export default class {
         //}
     }
 
-    setup() {
-        this.setupSettings();
-        this.setupButtons();
+    buttonClick(div) {
+        const fade = document.getElementById("fade");
+        const close = document.querySelector(`#${div.id} .exit`);
+
+        fade.style.display = "block";
+        div.style.display = "block";
+
+        close.onclick = () => (fade.style.display = "none", div.style.display = "none");
+
+        window.core.audio.buttonClick.play();
     }
 
     setupButtons() {
         const servers = document.getElementById("servers");
-        const fade = document.getElementById("fade");
         const serverList = document.getElementById("serverList");
         const login = document.getElementById("login");
 
-        login.onclick = () => {
-            document.getElementById("profile").outerHTML = this.getProfile();
-        }
-
-        servers.onclick = () => {
-            const close = document.querySelector("#serverList .exit");
-
-            fade.style.display = "block";
-            serverList.style.display = "block";
-
-            close.onclick = () => (fade.style.display = "none", serverList.style.display = "none");
-
-            window.core.audio.buttonClick.play();
-        }
+        login.onclick = () => document.getElementById("profile").outerHTML = this.getProfile();
+        servers.onclick = () => this.buttonClick(serverList);
 
         const serverL = document.querySelector(".server #join")
 
@@ -132,12 +122,12 @@ export default class {
         const leaderboard = document.getElementById("leaderboard");
         leaderboard.innerHTML = "";
        
-        players.sort((a, b) => b.points - a.points).forEach(({ name, points, color }, index) => {
+        players.sort((a, b) => b.points - a.points).forEach(({ nickname, score, color }, index) => {
             leaderboard.innerHTML += `
             <div class="boardItem">
                 <div class="text">
-                    <p><b style="margin-right: 5px;">#${index + 1}</b> ${name}</p>
-                    <p>Points: <b>${points}</b></p>
+                    <p><b style="margin-right: 5px;">#${index + 1}</b> ${nickname}</p>
+                    <p>Points: <b>${score}</b></p>
                 </div>
                 <span class="color" style="background-color: ${color};"></span>
             </div>`
@@ -283,8 +273,8 @@ export default class {
     setPlayers(players) {
         this.lobby.innerHTML = "";
         this.players = players;
-        this.players.forEach(({ color, name, rank }) => {
-            this.lobby.innerHTML += `<div class="player"><b style="color: #8C9399; margin-right: 15px;"><span style="color: ${color}; margin-left: 5px;">[${rank}]</span></b><b> ${name.toUpperCase()}</b></div>`;
+        this.players.forEach(({ color, nickname, rank }) => {
+            this.lobby.innerHTML += `<div class="player"><b style="color: #8C9399; margin-right: 15px;"><span style="color: ${color}; margin-left: 5px;">[${rank}]</span></b><b> ${nickname.toUpperCase()}</b></div>`;
         });
     }
 

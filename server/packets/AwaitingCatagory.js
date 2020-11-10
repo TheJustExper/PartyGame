@@ -1,12 +1,13 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function AwaitingCatagory() {}
 
 module.exports = AwaitingCatagory;
 
 AwaitingCatagory.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(12);
+    const buf = msgpack.encode({
+        opcode: 12,
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

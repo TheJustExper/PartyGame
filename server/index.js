@@ -4,9 +4,20 @@ const GameServer = require("./GameServer");
 const log4js = require("log4js");
 const logger = log4js.getLogger("MASTER");
 const db = require("./database/Database");
-const BinaryReader = require("./utils/BinaryReader");
+const Packets = require("./packets/packets");
+const msgpack = require("msgpack-lite");
 
 logger.level = "debug";
+
+function sendPacket(ws, packet) {
+    if (packet == null) return;
+    if (ws.readyState == WebSocket.OPEN) {
+        var buffer = packet.build();
+        if (buffer != null) {
+            ws.send(buffer, { binary: true });
+        }
+    }
+}
 
 
 db.connect(() => {
@@ -17,14 +28,16 @@ db.connect(() => {
         logger.debug("New connection to the Main server");
 
         ws.onmessage = (message) => {
-            let msg = new BinaryReader(message.data);
+            const msg = msgpack.decode(message.data);
 
-            switch(msg.readUInt8()) {
+            switch(msg.opcode) {
                 case 1:
-                    const username = msg.readStringUtf8(9);
-                    const password = msg.readStringUtf8();
+                    const { username, password } = msg.data;
 
-                    console.log(`name: ${username} password: ${password}`);
+                    if (username == "Exper" && password == "test") {
+                        console.log("Player logged in as: " + username)
+                        sendPacket(ws, new Packets.AccountInfo(username));
+                    }
                     break;
 
             }   

@@ -209,6 +209,8 @@ module.exports = class {
 
             this.gameServer.broadcast(new Packets.Voter(play.color));
 
+            console.log("Sent")
+
             if (this.roundAnswered.length == this.gameServer.players.length) {
                 console.log("All players voted! Sending results...");
                 this.isChanging = true;

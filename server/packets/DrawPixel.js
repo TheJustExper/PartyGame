@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function DrawPixel(f, s) {
     this.f = f;
@@ -8,14 +8,12 @@ function DrawPixel(f, s) {
 module.exports = DrawPixel;
 
 DrawPixel.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(14);
+   const buf = msgpack.encode({
+        opcode: 14,
+        data: {
+            position: [this.f[0], this.f[1], this.s[0], this.s[1]]
+        }
+    });
 
-    writer.writeUInt16(this.f[0]);
-    writer.writeUInt16(this.f[1]);
-
-    writer.writeUInt16(this.s[0]);
-    writer.writeUInt16(this.s[1]);
-
-    return writer.toBuffer();
+    return buf;
 };

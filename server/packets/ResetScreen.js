@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function ResetScreen(players) {
     this.players = players;
@@ -7,8 +7,10 @@ function ResetScreen(players) {
 module.exports = ResetScreen;
 
 ResetScreen.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(13);
+    const buf = msgpack.encode({
+        opcode: 13,
+        data: {}
+    });
 
-    return writer.toBuffer();
+    return buf;
 };

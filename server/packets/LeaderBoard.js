@@ -1,4 +1,4 @@
-const BinaryWriter = require("../utils/BinaryWriter");
+const msgpack = require("msgpack-lite");
 
 function Leaderboard(players) {
     this.players = players;
@@ -7,17 +7,16 @@ function Leaderboard(players) {
 module.exports = Leaderboard;
 
 Leaderboard.prototype.build = function () {
-    const writer = new BinaryWriter();
-    writer.writeUInt8(3);
-    writer.writeUInt8(this.players.length);
-
-    this.players.forEach(({ score, nickname, color }) => {
-        writer.writeUInt8(score);
-        writer.writeUInt8(nickname.length);
-        writer.writeStringUtf8(nickname);
-        writer.writeUInt8(color.length);
-        writer.writeStringUtf8(color);
+    const buf = msgpack.encode({
+        opcode: 3,
+        data: {
+            players: this.players.map(({ score, nickname, color }) => ({
+                score,
+                nickname,
+                color
+           }))
+        }
     });
 
-    return writer.toBuffer();
+    return buf;
 };
