@@ -122,7 +122,7 @@ export default class {
         const leaderboard = document.getElementById("leaderboard");
         leaderboard.innerHTML = "";
        
-        players.sort((a, b) => b.points - a.points).forEach(({ nickname, score, color }, index) => {
+        players.sort((a, b) => b.score - a.score).forEach(({ nickname, score, color }, index) => {
             leaderboard.innerHTML += `
             <div class="boardItem">
                 <div class="text">

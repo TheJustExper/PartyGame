@@ -91,7 +91,7 @@ module.exports = class {
         this.question = {}
         
         this.roundsPlayed = 0;
-        this.roundsMax = 0;
+        this.roundsMax = 10;
 
         this.playerAskedToPickCatagory = null;
         this.pickedCatagory = 0;
@@ -208,8 +208,6 @@ module.exports = class {
             this.roundAnswered.push(value);
 
             this.gameServer.broadcast(new Packets.Voter(play.color));
-
-            console.log("Sent")
 
             if (this.roundAnswered.length == this.gameServer.players.length) {
                 console.log("All players voted! Sending results...");
