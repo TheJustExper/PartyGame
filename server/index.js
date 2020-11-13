@@ -24,7 +24,11 @@ function sendPacket(ws, packet) {
 
 db.connect(() => {
     const wss = new WebSocket.Server({ port: config.get("MAIN_SERVER").port });
-    servers.push(new GameServer({ id: 1, port: 5050 }));
+
+    servers.push(new GameServer({ id: 1, port: 5050, gamemode: 0 }));
+    servers.push(new GameServer({ id: 2, port: 5040, gamemode: 1 }));
+    servers.push(new GameServer({ id: 3, port: 5030, gamemode: 0 }));
+    servers.push(new GameServer({ id: 2, port: 5020, gamemode: 1 }));
     
     wss.on('connection', (ws, req) => {
         logger.debug("New connection to the Main server");
@@ -51,12 +55,12 @@ db.connect(() => {
     setInterval(() => {
         wss.clients.forEach((ws) => {
             if (ws.readyState === WebSocket.OPEN) {
-                let mapped = servers.map(server => ({ port: server.port, players: server.players.length }));
+                let mapped = servers.map(server => ({ gamemode: server.gamemodeString, port: server.port, players: server.players.length }));
                 let packet = new Packets.ServerList(mapped);
 
                 sendPacket(ws, packet);
             }
         })
-    }, 1000);
+    }, 3000);
 });
 

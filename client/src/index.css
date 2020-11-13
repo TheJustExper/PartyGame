@@ -237,6 +237,8 @@
     box-shadow: var(--shadow);
     color: rgb(255 255 255);
     font-size: 11px;
+    border: 3px solid black;
+    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
  }
 
  #trivia {
@@ -408,8 +410,9 @@
   height: 600px;
   display: flex;
   border-radius: 3px;
-  box-shadow: var(--shadow);
   background-color: black;
+  border: 3px solid black;
+  box-shadow: rgb(0, 0, 0) 0px 8px 0px;
  }
 
  .app {
@@ -975,6 +978,10 @@
     box-sizing: border-box;
  }
 
+ #serverList .inner .servers .server:last-child {
+    margin-bottom: 0px;
+ }
+
  #serverList .inner .servers .server .players {
     width: 50px;
     height: 100%;
@@ -1129,7 +1136,6 @@
  .popup {
     background-color: #222429;
     width: 400px;
-    height: 350px;
     margin-bottom: 25px;
     box-sizing: border-box;
     transition: .1s;

@@ -77,7 +77,15 @@ export default class {
     setupPopups() {
         this.setupLogin();
         this.setupSettings();
+        this.setupLeaderboard();
         this.showWelcome();
+    }
+
+    setupLeaderboard() {
+        const login = document.getElementById("menu-leaderboard");
+        const button = document.getElementById("leaderboardButton");
+        
+        button.onclick = () => this.buttonClick(login);
     }
 
     setupLogin() {
@@ -331,12 +339,12 @@ export default class {
         const serverList = document.querySelector("#serverList .servers")
         serverList.innerHTML = "";
 
-        servers.forEach(({ port, players }, index) => {
+        servers.forEach(({ gamemode, port, players }, index) => {
             serverList.innerHTML += `
             <div id="server-${index}" ip="ws://localhost:${port}" class="server">
                 <div class="players">${players}/10</div>
                 <div class="box">
-                    <h1>Trivia</h1>
+                    <h1>${gamemode}</h1>
                 </div>
             <h1 id="join">JOIN</h1>
         </div>`

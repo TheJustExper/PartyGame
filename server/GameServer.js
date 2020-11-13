@@ -12,7 +12,7 @@ const Skribbl = require("./gamemodes/skribbl");
 let logger;
 
 class GameServer {
-    constructor({ owner, id, port }) {
+    constructor({ gamemode, owner, id, port }) {
         this.owner = owner;
         this.id = id;
         this.port = port;
@@ -20,9 +20,11 @@ class GameServer {
 
         this.wss.on('connection', this.onConnection.bind(this));
 
-        this.gameType = 1;
+        this.gameType = gamemode;
         this.gamemodes = [Trivia, Skribbl];
         this.gamemode = new (this.gamemodes[this.gameType])(this);
+        this.gamemodeStrings = ["Trivia", "Skribbl"]
+        this.gamemodeString = this.gamemodeStrings[this.gameType];
 
         this.state = "LOBBY";
         this.players = []
