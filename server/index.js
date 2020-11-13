@@ -7,6 +7,8 @@ const db = require("./database/Database");
 const Packets = require("./packets/packets");
 const msgpack = require("msgpack-lite");
 
+let servers = []
+
 logger.level = "debug";
 
 function sendPacket(ws, packet) {
@@ -22,7 +24,7 @@ function sendPacket(ws, packet) {
 
 db.connect(() => {
     const wss = new WebSocket.Server({ port: config.get("MAIN_SERVER").port });
-    new GameServer({ id: 1, port: 5050 });
+    servers.push(new GameServer({ id: 1, port: 5050 }));
     
     wss.on('connection', (ws, req) => {
         logger.debug("New connection to the Main server");
@@ -45,5 +47,16 @@ db.connect(() => {
 
         //db.get().collection("users").find({}).forEach(u => console.log(u))
     });
+
+    setInterval(() => {
+        wss.clients.forEach((ws) => {
+            if (ws.readyState === WebSocket.OPEN) {
+                let mapped = servers.map(server => ({ port: server.port, players: server.players.length }));
+                let packet = new Packets.ServerList(mapped);
+
+                sendPacket(ws, packet);
+            }
+        })
+    }, 1000);
 });
 

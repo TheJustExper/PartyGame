@@ -2,10 +2,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 
  :root {
-     --regular-color: linear-gradient(90deg,#ff0098 0%,#ff00f7 100%);
-     --regular-color-flat: #ff0098;
+     --regular-color:#1f70ea;
+     --regular-color-flat:#1f70ea;
      --ui-scale: 1;
      --shadow: 0 0 0 calc(1.5px*var(--ui-scale)) #121418, 0 calc(3px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) #121418, calc(-4.5px*var(--ui-scale)) calc(6px*var(--ui-scale)) 0 calc(1.5px*var(--ui-scale)) rgba(0, 0, 0, .1);
+ }
+
+ body::before {
+        background-image: url(https://gartic.io/static/images/new/textura.png);
+        content: '';
+        width: 200%;
+        display: block;
+        position: absolute;
+        z-index: 0;
+        left: 50%;
+        top: 50%;
+        height: 200%;
+        -webkit-transform: translate(-50%,-50%) rotate(345deg);
+        -moz-transform: translate(-50%,-50%) rotate(345deg);
+        -ms-transform: translate(-50%,-50%) rotate(345deg);
+        -o-transform: translate(-50%,-50%) rotate(345deg);
+        transform: translate(-50%,-50%) rotate(345deg);
  }
 
  /* The container */
@@ -110,7 +127,7 @@
      font-weight: 200;
      overflow: hidden;
      height: 100vh;
-     background-color: rgb(24 24 24);
+     background-color: #0a5efb;
      
      background-position: center;
      background-size: 120%, 120%;
@@ -284,6 +301,39 @@
     background-color: rgb(192 201 218) !important;
  }  
 
+ @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
+.anim-typewriter{
+    animation: typewriter 4s steps(44) 1s 1 normal both,
+               blinkTextCursor 500ms steps(44) infinite normal;
+}
+
+@keyframes typewriter{
+    from{width: 0;}
+    to{width: 24em;}
+}
+
+@keyframes blinkTextCursor{
+    from{border-right-color: rgba(255,255,255,.75);}
+    to{border-right-color: transparent;}
+}
+
+.line-1{
+    position: relative;
+    top: 50%;  
+    width: 24em;
+    margin: 0 auto;
+    border-right: 2px solid rgba(255,255,255,.75);
+    font-size: 180%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);    
+}
+
  #chatbox {
     width: 450px;
     height: 300px;
@@ -305,6 +355,13 @@
     color: rgb(255 255 255);
     max-height: calc(100% - 50px);
     overflow-y: scroll;
+ }
+
+ .mentioned {
+    background-color: rgb(38 39 43);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 17px;
  }
 
  #chatbox #messages::-webkit-scrollbar {
@@ -341,7 +398,6 @@
     color: white;
     font-family: Rajdhani !important;
     font-size: 20px;
-    box-shadow: rgb(0, 0, 0) 0px 8px 0px;
     border-width: 3px;
     border-style: solid;
     border-color: rgb(0, 0, 0);
@@ -779,7 +835,6 @@
      display: flex;
      flex-direction: row;
      z-index: 1;
-     animation: fadeIn 2s;
      text-shadow: 0.07em 0.07em 0 rgba(15, 18, 23, .9), -0.07em 0.07em 0 rgba(15, 18, 23, .9), 0.07em -0.07em 0 rgba(15, 18, 23, .9), -0.07em -0.07em 0 rgba(15, 18, 23, .9), 0 0.0798em 0 rgba(15, 18, 23, .9), 0 -0.0798em 0 rgba(15, 18, 23, .9), 0.0798em 0 0 rgba(15, 18, 23, .9), -0.0798em 0 0 rgba(15, 18, 23, .9), 0 0.0998em 0 rgba(15, 18, 23, .9), 0.0798em 0.0998em 0 rgba(15, 18, 23, .9), -0.0798em 0.0998em 0 rgba(15, 18, 23, .9), 0 0.1398em 0 rgba(15, 18, 23, .9), 0.0798em 0.1398em 0 rgba(15, 18, 23, .9), -0.0798em 0.1398em 0 rgba(15, 18, 23, .9), -0.2em 0.13em 0 rgba(17, 17, 17, .25);
  }
 
@@ -958,7 +1013,7 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.6);
     z-index: 2;
     display: none;
  }
@@ -983,6 +1038,94 @@
     justify-content: space-between;
  }
 
+ #welcome {
+     height: auto;
+ }
+
+ #welcome .content {
+    padding: 20px;
+ }
+
+ #welcome .content .change {
+    font-size: 16px;
+    color: #cccccc;
+    margin-bottom: 20px;
+ }
+
+ #welcome .content .change:last-child {
+    margin-bottom: 0px;
+ }
+
+ #welcome .content .change b {
+     font-size: 23px;
+     color: gold;
+ }
+
+ #welcome .content .change p {
+    margin-top: 5px;
+ }
+
+ #login {
+     height: auto;
+ }
+
+ #login .content {
+    color: white;
+    display: flex;
+    flex-direction: column;
+ }
+
+ #login .content h1 {
+    font-size: 23px;
+    color: gold;
+    margin-bottom: 5px;
+ }
+
+ #login .content input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px 12px;
+    cursor: text;
+    display: block;
+    box-sizing: border-box;
+    background: #43454a;
+    text-align: left;
+    user-select: text !important;
+    pointer-events: all !important;
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: #fff;
+    box-shadow: var(--shadow);
+    border-radius: 3px;
+    font-family: Rajdhani;
+    border: none;
+ }
+
+ #login .content #login-button {
+    width: 100%;
+    margin-top: 30px;
+    padding: 11px 12px;
+    border: 0;
+    cursor: text;
+    display: block;
+    box-sizing: border-box;
+    background: var(--regular-color-flat);
+    text-align: left;
+    user-select: text !important;
+    pointer-events: all !important;
+    font-size: 16px;
+    line-height: 21px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: #fff;
+    box-shadow: var(--shadow);
+    border-radius: 3px;
+    font-family: Rajdhani;
+    text-align: center;
+ }
+
  .popup {
     background-color: #222429;
     width: 400px;
@@ -997,12 +1140,36 @@
     transition: .2s;
     position: absolute;
     z-index: 3;
-    display: none;
     box-shadow: rgb(0, 0, 0) 0px 8px 0px;
     border-width: 3px;
     border-style: solid;
     border-color: rgb(0, 0, 0);
+    visibility: hidden;
  }
+
+ .show2 {
+    visibility: visible !important;
+    animation: slideInLeft 0.5s;
+  }
+
+  .unshow2 {
+    visibility: hidden !important;
+    animation: zoomOut 0.2s;
+  }
+
+  .show {
+    visibility: visible !important;
+    animation: zoomIn 0.2s;
+  }
+
+  .unshow {
+    visibility: hidden !important;
+    animation: zoomOut 0.2s;
+  }
+
+  #settings, #serverList .content {
+      padding: 0px;
+  }
 
  .popup .header {
      width: 100%;
@@ -1018,6 +1185,10 @@
  .popup .header h1 {
     color: white;
     font-size: 18px;
+ }
+
+ .popup .content {
+     padding: 20px;
  }
 
  .popup .content .setting {
@@ -1582,6 +1753,7 @@
      background-color: #393D44;
      align-items: center;
      justify-content: space-between;
+     margin-bottom: 10px;
  }
 
 #menu #leaderboard .boardItem .text {
@@ -1596,8 +1768,6 @@
     height: 47px;
     width: 50px;
     min-width: 50px;
-    border-left: 3px solid rgb(0 0 0);
-    border-bottom: 3px solid rgb(0 0 0);
  }
 
  #menu #leaderboard .boardItem p {

@@ -5,9 +5,12 @@ import MenuDesign from "./utils/MenuDesign";
 import Trivia from "./games/Trivia";
 import Skribbl from "./games/Skribbl";
 
-import Music from "./audio/menu/music.mp3";
+import Music from "./audio/menu/ui_intro.mp3";
 import Win from "./audio/win.mp3";
-import Clicked from "./audio/buttons/clicked.mp3";
+import Clicked from "./audio/menu/ui_click1.mp3";
+
+import PopupOpen from "./audio/menu/ui_open_window.mp3";
+import PopupClose from "./audio/menu/ui_close_window.mp3";
 
 window.DEBUG = true;
 
@@ -32,13 +35,16 @@ export default class {
         this.selectedPopup = null;
 
         this.state = "LOBBY";
+        this.username = "Guest";
 
         this.roundTime = 0;
 
         this.audio = {
             music: new Audio(Music),
             win: new Audio(Win),
-            buttonClick: new Audio(Clicked)
+            buttonClick: new Audio(Clicked),
+            popupOpen: new Audio(PopupOpen),
+            popupClose: new Audio(PopupClose)
         }   
 
         this.state = {
@@ -54,15 +60,48 @@ export default class {
         document.body.addEventListener("mousedown", function () {
             if (window.core.audio.music.muted) {
                 window.core.audio.music.muted = false;
-                window.core.audio.music.volume = 0.1;
+                window.core.audio.music.volume = 0.01;
                 window.core.audio.music.play();
             }
         })
+
+        const welcome = document.getElementById("welcome");
+        welcome.classList.toggle("show2");
     }
 
     setup() {
-        this.setupSettings();
+        this.setupPopups();
         this.setupButtons();
+    }
+
+    setupPopups() {
+        this.setupLogin();
+        this.setupSettings();
+        this.showWelcome();
+    }
+
+    setupLogin() {
+        const login = document.getElementById("login");
+        const button = document.getElementById("loginButton");
+        
+        button.onclick = () => this.buttonClick(login);
+    }
+
+    showWelcome() {
+        const fade = document.getElementById("fade");
+        const div = document.getElementById("welcome");
+        const close = document.querySelector(`#welcome .exit`);
+
+        fade.style.display = "block";
+
+        close.onclick = () => {
+            fade.style.display = "none",  div.classList.toggle("show2"), div.classList.toggle("unshow2");
+            window.core.audio.popupClose.play();
+        }
+
+        if (div.classList.contains("unshow")) {
+            div.classList.toggle("unshow");
+        }
     }
 
     setupSettings() {
@@ -84,11 +123,19 @@ export default class {
         const close = document.querySelector(`#${div.id} .exit`);
 
         fade.style.display = "block";
-        div.style.display = "block";
 
-        close.onclick = () => (fade.style.display = "none", div.style.display = "none");
+        if (div.classList.contains("unshow")) {
+            div.classList.toggle("unshow");
+        }
 
-        window.core.audio.buttonClick.play();
+        div.classList.toggle("show");
+
+        close.onclick = () => {
+            fade.style.display = "none",  div.classList.toggle("show"), div.classList.toggle("unshow");
+            window.core.audio.popupClose.play();
+        }
+
+        window.core.audio.popupOpen.play();
     }
 
     setupButtons() {
@@ -98,14 +145,6 @@ export default class {
 
         login.onclick = () => document.getElementById("profile").outerHTML = this.getProfile();
         servers.onclick = () => this.buttonClick(serverList);
-
-        const serverL = document.querySelector(".server #join")
-
-        serverL.onclick = (data) => {
-            let ip = data.target.parentElement.getAttribute("ip");
-            this.socket = new GameSocket(this, ip);
-            window.core.audio.buttonClick.play();
-        }
     }
 
     showGamemodeScreen() {
@@ -180,7 +219,7 @@ export default class {
         
         messages.innerHTML += `
         <div class="message">
-            <p><b class="name" style="color: ${color != null ? color : "white"}">${name}:</b> ${message}</p>
+            <p><b class="name" style="padding-right: 5px; color: ${color != null ? color : "white"}">${name}:</b> ${message}</p>
         </div>`
 
         messages.scrollTop = messages.scrollHeight;
@@ -288,6 +327,32 @@ export default class {
         }
     }
 
+    renderServers(servers) {
+        const serverList = document.querySelector("#serverList .servers")
+        serverList.innerHTML = "";
+
+        servers.forEach(({ port, players }, index) => {
+            serverList.innerHTML += `
+            <div id="server-${index}" ip="ws://localhost:${port}" class="server">
+                <div class="players">${players}/10</div>
+                <div class="box">
+                    <h1>Trivia</h1>
+                </div>
+            <h1 id="join">JOIN</h1>
+        </div>`
+        });
+
+        const serverL = document.querySelectorAll(".server #join")
+
+        for (let server of serverL) {
+            server.onclick = (data) => {
+                let ip = data.target.parentElement.getAttribute("ip");
+                this.socket = new GameSocket(this, ip);
+                window.core.audio.buttonClick.play();
+            }
+        }
+    }
+
     getProfile() {
         return `<div class="container" id="profile">
         <div class="header">
@@ -308,6 +373,43 @@ export default class {
             </div>
         </div>
     </div>`;
+    }
+
+    loadLobbyMenu() {
+        const menu = document.getElementById("menu");
+
+        menu.outerHTML = `
+        <div id="fade"></div>
+        <div id="menu">
+                <div class="section left">
+                <div class="sections gameType">
+                    <h1 id="state">Waiting...</h1>
+                </div>
+                <div id="start" class="sections">
+                    <div class="text">
+                        <h1>START</h1>
+                        <p>Selected mode: <span>Normal</span></p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
+                <div id="settings" class="sections">
+                    <div class="text">
+                        <h1>SETTINGS</h1>
+                        <p>CHOOSE SETTINGS</p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
+                <div id="leave" class="sections">
+                    <div class="text">
+                        <h1>LEAVE</h1>
+                        <p>LEAVE THE GAME</p>
+                    </div>
+                    <div class="slide"></div>
+                </div>
+            </div>
+            <div class="section lobby"></div>
+        </div>
+        `;
     }
 
     resetLobby() {

@@ -7,35 +7,7 @@ export default class {
         const menu = document.getElementById("menu");
 
         if (type == 1) {
-            menu.innerHTML = `
-                <div class="section left">
-                <div class="sections gameType">
-                    <h1 id="state">Waiting...</h1>
-                </div>
-                <div id="start" class="sections">
-                    <div class="text">
-                        <h1>START</h1>
-                        <p>Selected mode: <span>Normal</span></p>
-                    </div>
-                    <div class="slide"></div>
-                </div>
-                <div id="settings" class="sections">
-                    <div class="text">
-                        <h1>SETTINGS</h1>
-                        <p>CHOOSE SETTINGS</p>
-                    </div>
-                    <div class="slide"></div>
-                </div>
-                <div id="leave" class="sections">
-                    <div class="text">
-                        <h1>LEAVE</h1>
-                        <p>LEAVE THE GAME</p>
-                    </div>
-                    <div class="slide"></div>
-                </div>
-            </div>
-            <div class="section lobby"></div>
-        `;
+            
         } else {
             document.body.style = "justify-content: unset";
             menu.style = "width: 100%; height: auto; justify-content: center;"

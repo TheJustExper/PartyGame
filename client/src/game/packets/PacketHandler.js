@@ -102,6 +102,10 @@ export default class {
             case Packets.AccountInfo:
                 var { username } = data;
                 break;
+            case Packets.ServerList:
+                var { servers } = data;
+                this.core.renderServers(servers);
+                break;
         }
     }
 }

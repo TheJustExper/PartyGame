@@ -96,7 +96,7 @@ export default class {
     }
 
     onceUsernameIsSent() {
-        this.core.menus.loadMenu(1);
+        this.core.loadLobbyMenu();
         const start = document.getElementById("start");
 
         start.onclick = () => this.sendStart();

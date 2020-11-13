@@ -16,4 +16,5 @@ export default {
     DrawPixel: 14,
     ResetBoard: 15,
     AccountInfo: 16,
+    ServerList: 17
 }

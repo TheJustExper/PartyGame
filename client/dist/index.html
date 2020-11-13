@@ -2,6 +2,8 @@
 
 <head>
     <script src="main.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://rawgithub.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
 </head>
@@ -9,6 +11,31 @@
 <body>
     <div id="main">
         <div id="fade"></div>
+        <div id="menu-endgame"></div>
+        <div id="login" class="popup">
+            <div class="header">
+                <h1>Login</h1>
+                <span class="exit">X</span>
+            </div>
+            <div class="content">
+                <h1>Login</h1>
+                <input id="login-username" placeholder="Username"/>
+                <input id="login-password" placeholder="Password"/>
+                <button id="login-button">Login</button>
+            </div>
+        </div>
+        <div id="welcome" class="popup">
+            <div class="header">
+                <h1>Welcome</h1>
+                <span class="exit">X</span>
+            </div>
+            <div class="content">
+                <div class="change">
+                    <b>Soon</b>
+                    <p>Adding account system for saving games, coins, shop. <br>More animations for the menus.<br>Cosmetics to be seen ingame and in menus</p>
+                </div>
+            </div>
+        </div>
         <div id="settings" class="popup">
             <div class="header">
                 <h1>Settings</h1>
@@ -43,27 +70,12 @@
                 <span class="exit">X</span>
             </div>
             <div class="inner">
-                <div class="servers">
-                    <div id="server-1" ip="ws://localhost:5050" class="server">
-                        <div class="players">0/10</div>
-                        <div class="box">
-                            <h1>Trivia</h1>
-                        </div>
-                        <h1 id="join">JOIN</h1>
-                    </div>
-                    <div id="server-1" ip="ws://localhost:5050" class="server">
-                        <div class="players">0/10</div>
-                        <div class="box">
-                            <h1>Skribbl</h1>
-                        </div>
-                        <h1 id="join">JOIN</h1>
-                    </div>
-                </div>
+                <div class="servers"></div>
             </div>
         </div>
         <div class="container inactive" id="profile">
             <h1>CREATE AN ACCOUNT OR LOGIN TO SAVE YOUR STATS</h1>
-            <button class="login" id="login">LOGIN</button>
+            <button class="login" id="loginButton">LOGIN</button>
         </div>
         <div class="container">
             <div class="sections button" id="servers">

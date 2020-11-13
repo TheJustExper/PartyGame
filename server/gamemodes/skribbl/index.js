@@ -1,6 +1,7 @@
 const Packets = require("../../packets/packets");
 const config = require('config');
 
+
 module.exports = class {
     constructor(gameserver) {
         this.gameServer = gameserver;
@@ -74,6 +75,7 @@ module.exports = class {
     onChatMessage(player, msg) {
         msg = msg.split("\u0000").join("")
 
+    
         if (msg.length == 0 || msg.length > 100) return;
         if (player.id == this.playerAskedToPickCatagory.id) return;
 
@@ -109,6 +111,17 @@ module.exports = class {
                 player.sendPacket(new Packets.ChatMessage("[SERVER]", `You guessed the correct word! Waiting for the others. [${players}]`, "rgb(133 109 255)"))
             }
         } else {
+            const usernames = msg.split(" ").filter(d => d.startsWith("@"));
+
+            usernames.forEach(name => {
+                const username = name.split("@")[1];
+                const foundPlayer = this.gameServer.players.find(play => play.nickname.toLowerCase() == username.toLowerCase());
+
+                if (foundPlayer) {
+                    msg = msg.replace("@" + username, `<span class="mentioned">${username}</span>`);
+                }
+            });
+
             this.gameServer.broadcast(new Packets.ChatMessage(player.nickname, msg, player.color));
         }
     }

@@ -17,6 +17,7 @@ const ResetScreen = require("./ResetScreen");
 const DrawPixel = require("./DrawPixel");
 const ResetBoard = require("./ResetBoard");
 const AccountInfo = require("./AccountInfo");
+const ServerList = require("./ServerList");
 
 module.exports = {
     GameType,
@@ -36,4 +37,5 @@ module.exports = {
     DrawPixel,
     ResetBoard,
     AccountInfo,
+    ServerList,
 }
