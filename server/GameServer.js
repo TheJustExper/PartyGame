@@ -33,7 +33,7 @@ class GameServer {
         this.players = []
         this.interval = null;
 
-        this.minPlayers = 5;
+        this.minPlayers = 2;
 
         this.startTime = config.get("gameserver.countdown");
 

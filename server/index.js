@@ -26,7 +26,9 @@ async function run() {
             port: config.get("MAIN_SERVER").port
         });
 
-        servers.push(new GameServer({ id: 1, port: 5050, gamemode: 0 }));
+        servers.push(new GameServer({ id: 1, port: 5050, gamemode: 1 }));
+        servers.push(new GameServer({ id: 2, port: 5040, gamemode: 0 }));
+        servers.push(new GameServer({ id: 3, port: 5030, gamemode: 1 }));
 
         const users = await db.get().collection("users");
 
@@ -98,7 +100,6 @@ async function run() {
                             var account = new Packets.AccountInfo(info);
                             sendPacket(ws, account);
                         } catch (err) {
-                            console.log("Sent invalid")
                             sendPacket(ws, new Packets.TokenExpired());
                         }
                         break;
