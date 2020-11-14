@@ -5,6 +5,9 @@ const Packets = require("./packets/packets");
 const BinaryReader = require("./utils/BinaryReader");
 const msgpack = require("msgpack-lite");
 const config = require("config");
+const dotenv = require("dotenv");
+const jwt = require("jsonwebtoken");
+const db = require("./database/Database");
 
 const Trivia = require("./gamemodes/trivia/Trivia");
 const Skribbl = require("./gamemodes/skribbl");
@@ -29,6 +32,8 @@ class GameServer {
         this.state = "LOBBY";
         this.players = []
         this.interval = null;
+
+        this.minPlayers = 5;
 
         this.startTime = config.get("gameserver.countdown");
 
@@ -65,18 +70,36 @@ class GameServer {
                 
                 switch(msg.opcode) {
                     case 0:
+                        const token = req.url.split("token=")[1];
                         const { username } = msg.data;
-                        const playerObj = new Player({ ip, ws, game: this });
+                        
+                        if (username.length > 0 && username.length < 12) {
+                            if (token != null) {
+                                jwt.verify(token, process.env.TOKEN_SECRET, (err, { username }) => {
+                                    db.get().collection("users").findOne({ username }, (err, user) => {
+                                        var playerObj = new Player({ ip, ws, game: this, account: user });
 
-                        playerObj.nickname = username;
-                        player = playerObj;
+                                        playerObj.nickname = username;
+                                        player = playerObj;
 
-                        this.players.push(playerObj);
-                        this.broadcast(new Packets.PlayerList(this.players));
+                                        this.players.push(playerObj);
+                                        this.broadcast(new Packets.PlayerList(this.players));
 
-                        this.startGame();
+                                        this.startGame();
+                                    });
+                                });
+                            } else {
+                                var playerObj = new Player({ ip, ws, game: this });
 
-                        logger.debug(`A new player has been created - ID: ${playerObj.id}`);
+                                playerObj.nickname = username;
+                                player = playerObj;
+
+                                this.players.push(playerObj);
+                                this.broadcast(new Packets.PlayerList(this.players));
+
+                                this.startGame();
+                            }
+                        }
                         
                         break;
                 }
@@ -106,7 +129,7 @@ class GameServer {
     }
 
     startGame() {
-        if (this.players.length >= 2) {
+        if (this.players.length >= this.minPlayers) {
             this.broadcast(new Packets.GameType(this.gameType));
 
             let time = this.startTime;

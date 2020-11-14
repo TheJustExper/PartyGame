@@ -892,6 +892,19 @@
      }
  }
 
+ #logout {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    border: 2px solid rgb(0 0 0);
+    flex: 1 0 16%;
+    background-color: rgb(255 63 72);
+    color: rgb(255 255 255);
+    BOX-SIZING: border-box;
+    user-select: none;
+    margin-top: 15px;
+ }
+
  #menu .info {
      width: 400px;
      margin-left: 35px;
@@ -1153,6 +1166,47 @@
     visibility: hidden;
  }
 
+ .popup .user {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(27 29 33);
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-radius: 3px;
+    margin-bottom: 20px;
+ }
+
+ .popup .user:last-child {
+    margin-bottom: 0px;
+ }
+
+ .user .profileImg {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid black;
+ }
+
+ .user .text {
+     color: white;
+     margin-left: 10px;
+ }
+
+ .user .text b {
+    font-size: 20px;
+ }
+
+ .user .text p {
+     color: #8C9399;
+ }
+
+ .user .text span {
+     color: gold;
+ }
+
  .show2 {
     visibility: visible !important;
     animation: slideInLeft 0.5s;
@@ -1195,7 +1249,16 @@
 
  .popup .content {
      padding: 20px;
+     max-height: 425px;
+     overflow: auto;
+     -ms-overflow-style: none;  /* IE and Edge */
+     scrollbar-width: none;  /* Firefox */
  }
+
+ .popup .content::-webkit-scrollbar {
+    display: none;
+  }
+  
 
  .popup .content .setting {
     width: 100%;
@@ -1665,6 +1728,11 @@
   color: rgb(255 255 255);
  }
 
+ .gradient {
+    background-clip: text;
+	-webkit-text-fill-color: transparent;
+ }
+
  #menu .lobby .player {
    width: 100%;
    height: 50px;
@@ -1672,10 +1740,12 @@
 
    display: flex;
    align-items: center;
-   padding-left: 15px;
+   justify-content: space-between;
+   padding: 15px;
    font-size: 20px;
    color: rgb(255 255 255);
    box-shadow: var(--shadow);
+   box-sizing: border-box;
  }
 
 #menu .right .lobby::-webkit-scrollbar {

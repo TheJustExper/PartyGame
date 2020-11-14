@@ -1,4 +1,5 @@
 import Packets from "./Packets";
+import Account from "../utils/Account";
 
 export default class {
     constructor(core) {
@@ -100,11 +101,19 @@ export default class {
                 this.core.gamemode.resetBoard();
                 break;
             case Packets.AccountInfo:
-                var { username } = data;
+                Account.setAccountInfo(data);
+                this.core.onceLoggedIn();
                 break;
             case Packets.ServerList:
                 var { servers } = data;
                 this.core.renderServers(servers);
+                break;
+            case Packets.AccountToken:
+                var { token } = data;
+                Account.setToken(token);
+                break;
+            case Packets.TokenExpired:
+                this.core.logout();
                 break;
         }
     }

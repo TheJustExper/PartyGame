@@ -1,6 +1,7 @@
 
 import GameSocket from "./utils/GameSocket";
 import MenuDesign from "./utils/MenuDesign";
+import Account from "./utils/Account";
 
 import Trivia from "./games/Trivia";
 import Skribbl from "./games/Skribbl";
@@ -33,6 +34,7 @@ export default class {
         this.lobby = null;
         this.timer = null;
         this.selectedPopup = null;
+        this.activePopup = null;
 
         this.state = "LOBBY";
         this.username = "Guest";
@@ -46,12 +48,6 @@ export default class {
             popupOpen: new Audio(PopupOpen),
             popupClose: new Audio(PopupClose)
         }   
-
-        this.state = {
-            account: {
-                account: localStorage.getItem("account")
-            }
-        }
 
         this.setup();
 
@@ -67,6 +63,12 @@ export default class {
 
         const welcome = document.getElementById("welcome");
         welcome.classList.toggle("show2");
+
+        setTimeout(() => {
+            if (Account.getToken() != null) {
+                this.socket.sendToken(Account.getToken());
+            }
+        }, 1000)
     }
 
     setup() {
@@ -91,7 +93,17 @@ export default class {
     setupLogin() {
         const login = document.getElementById("login");
         const button = document.getElementById("loginButton");
-        
+
+        const loginButton = document.getElementById("login-button");
+        const username = document.getElementById("login-username");
+        const password = document.getElementById("login-password");
+
+        loginButton.onclick = () => {
+            if (username.value.length > 0 && password.value.length > 0) {
+                window.core.socket.sendLogin(username.value, password.value);
+            }
+        }
+
         button.onclick = () => this.buttonClick(login);
     }
 
@@ -102,14 +114,22 @@ export default class {
 
         fade.style.display = "block";
 
+        this.activePopup = div;
+
         close.onclick = () => {
             fade.style.display = "none",  div.classList.toggle("show2"), div.classList.toggle("unshow2");
             window.core.audio.popupClose.play();
+            this.activePopup = null;
         }
 
         if (div.classList.contains("unshow")) {
             div.classList.toggle("unshow");
         }
+    }
+
+    closeManually(div) {
+        const fade = document.getElementById("fade");
+        fade.style.display = "none",  div.classList.toggle("show"), div.classList.toggle("unshow");
     }
 
     setupSettings() {
@@ -119,18 +139,13 @@ export default class {
         button.onclick = () => this.buttonClick(settings);
     }
 
-    accountAuth() {
-        //if (this.state.account.account != null) {
-            const { username, password } = { username: "Exper", password: "test" }
-            this.socket.sendLogin(username, password);
-        //}
-    }
-
     buttonClick(div) {
         const fade = document.getElementById("fade");
         const close = document.querySelector(`#${div.id} .exit`);
 
         fade.style.display = "block";
+
+        this.activePopup = div;
 
         if (div.classList.contains("unshow")) {
             div.classList.toggle("unshow");
@@ -141,6 +156,7 @@ export default class {
         close.onclick = () => {
             fade.style.display = "none",  div.classList.toggle("show"), div.classList.toggle("unshow");
             window.core.audio.popupClose.play();
+            this.activePopup = null;
         }
 
         window.core.audio.popupOpen.play();
@@ -151,7 +167,6 @@ export default class {
         const serverList = document.getElementById("serverList");
         const login = document.getElementById("login");
 
-        login.onclick = () => document.getElementById("profile").outerHTML = this.getProfile();
         servers.onclick = () => this.buttonClick(serverList);
     }
 
@@ -160,7 +175,7 @@ export default class {
     }
 
     playButtonClicked() {
-        this.username = document.getElementById("username").value;
+        this.username = Account.getAccountInfo() ? Account.getAccountInfo().username : document.getElementById("username").value;
         this.lobby = document.querySelector(".lobby");
         window.core.audio.buttonClick.play();
     }
@@ -170,13 +185,15 @@ export default class {
         leaderboard.innerHTML = "";
        
         players.sort((a, b) => b.score - a.score).forEach(({ nickname, score, color }, index) => {
+            let web = color.startsWith("-webkit");
+
             leaderboard.innerHTML += `
             <div class="boardItem">
                 <div class="text">
                     <p><b style="margin-right: 5px;">#${index + 1}</b> ${nickname}</p>
                     <p>Points: <b>${score}</b></p>
                 </div>
-                <span class="color" style="background-color: ${color};"></span>
+                <span class="color" style="background: ${color};"></span>
             </div>`
         });
     }
@@ -234,7 +251,14 @@ export default class {
     }
 
     serverJoined() {
-        document.body.innerHTML = `
+        const account = Account.getAccountInfo();
+
+        if (account != null) {
+            document.body.innerHTML = `<div id="menu"></div>`
+            window.core.playButtonClicked();
+            window.core.socket.sendUsername(account.username);
+        } else {
+            document.body.innerHTML = `
             <div id="menu">
             <div class="section left">
                 <input placeholder="Username" value="Testing" id="username"/>
@@ -246,15 +270,16 @@ export default class {
                     <div class="slide"></div>
                 </div>
             </div>
-        `
+            `
 
-        const play = document.getElementById("play");
-        const username = document.getElementById("username");
+            const play = document.getElementById("play");
+            const username = document.getElementById("username");
 
-        play.onclick = () => {
-            window.core.playButtonClicked();
-            window.core.audio.buttonClick.play();
-            window.core.socket.sendUsername(username.value);
+            play.onclick = () => {
+                window.core.playButtonClicked();
+                window.core.audio.buttonClick.play();
+                window.core.socket.sendUsername(username.value);
+            }
         }
     }
 
@@ -320,8 +345,13 @@ export default class {
     setPlayers(players) {
         this.lobby.innerHTML = "";
         this.players = players;
-        this.players.forEach(({ color, nickname, rank }) => {
-            this.lobby.innerHTML += `<div class="player"><b style="color: #8C9399; margin-right: 15px;"><span style="color: ${color}; margin-left: 5px;">[${rank}]</span></b><b> ${nickname.toUpperCase()}</b></div>`;
+        this.players.forEach(({ color, nickname, rank, level }) => {
+            let style = `color: ${color}; margin-left: 5px;`;
+            let web = color.startsWith("-webkit");
+            if (web) {
+                style = `background: ${color};`;
+            }
+            this.lobby.innerHTML += `<div class="player"><div><b style="color: #8C9399; margin-right: 15px;"><span style="${style}" class="${web ? "gradient" : ""}">[${rank}]</span></b><b> ${nickname.toUpperCase()}</b></div><b style="color: gold;">${level}</b></div>`;
         });
     }
 
@@ -354,33 +384,63 @@ export default class {
 
         for (let server of serverL) {
             server.onclick = (data) => {
-                let ip = data.target.parentElement.getAttribute("ip");
+                let ip = Account.getToken() ? data.target.parentElement.getAttribute("ip") + "/?token=" + Account.getToken() : data.target.parentElement.getAttribute("ip");
                 this.socket = new GameSocket(this, ip);
                 window.core.audio.buttonClick.play();
             }
         }
     }
 
+    onceLoggedIn() {
+        if (this.activePopup == null || this.activePopup.id == "login") {
+            this.closeManually(document.getElementById("login"));
+        }
+        this.getProfile();
+    }
+
+    logout() {
+        Account.logout();
+        this.getProfile();
+        this.setupLogin();
+    }
+
     getProfile() {
-        return `<div class="container" id="profile">
-        <div class="header">
-            <div class="side">
-                <img id="profileImg" src="https://image.freepik.com/free-vector/flying-slice-pizza-cartoon-vector-illustration-fast-food-concept-isolated-vector-flat-cartoon-style_138676-1934.jpg"/>
-                <div class="text">
-                    <h1>Exper</h1>
-                    <b>Level: <span style="color: #00FF9D;">9</span></b>
+        let account = Account.getAccountInfo();
+
+        if (account != null) {
+            const { username, level } = account;
+
+            document.getElementById("profile").outerHTML = `<div class="container" id="profile">
+            <div class="header">
+                <div class="side">
+                    <img id="profileImg" src="https://image.freepik.com/free-vector/flying-slice-pizza-cartoon-vector-illustration-fast-food-concept-isolated-vector-flat-cartoon-style_138676-1934.jpg"/>
+                    <div class="text">
+                        <h1>${username}</h1>
+                        <b>Level: <span style="color: gold;">${level}</span></b>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="bottom">
-            <div class="buttons">
-                <div class="button">Shop</div>
-                <div class="button">Stats</div>
-                <div class="button">...</div>
-                <div class="button">...</div>
+            <div class="bottom">
+                <div class="buttons">
+                    <div class="button">Shop</div>
+                    <div class="button">Stats</div>
+                    <div class="button">...</div>
+                    <div class="button">...</div>
+                </div>
+                <button id="logout">Logout</button>
             </div>
-        </div>
-    </div>`;
+        </div>`;
+
+        const logout = document.getElementById("logout");
+        logout.onclick = () => {
+            window.core.logout();
+        }
+        } else {
+            document.getElementById("profile").outerHTML = `<div class="container inactive" id="profile">
+            <h1>CREATE AN ACCOUNT OR LOGIN TO SAVE YOUR STATS</h1>
+            <button class="login" id="loginButton">LOGIN</button>
+            </div>`
+        }
     }
 
     loadLobbyMenu() {

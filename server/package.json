@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "config": "^3.3.2",
+    "dotenv": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
     "log4js": "^6.3.0",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.11",

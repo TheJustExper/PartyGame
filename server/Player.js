@@ -14,16 +14,23 @@ class Player {
      * @param {ws} ws - WebSocket.
      * @param {string} ip - Ip of the user.
      */
-    constructor({ ws, ip, game }) {
+    constructor({ ws, ip, game, account }) {
         this.game = game;
         this.id = game.players.length + 1;
         this.ws = ws;
         this.ip = ip;
         this.score = 0;
-        this.rank = "PLAYER";
         this.nickname = "Guest";
         this.state = "USERNAME";
-        this.color = this.getRandomColor();
+        this.color = account ? "#0a5efb" : this.getRandomColor();
+        this.rank = account ? "ACCOUNT" : "GUEST";
+        this.account = account;
+
+        if (this.account != null) {
+            if (this.account.username == "Exper") {
+                this.rank = "DEVELOPER";
+            }
+        }
 
         ws.on("message", this.handleMessage.bind(this));
     }

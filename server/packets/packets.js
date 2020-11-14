@@ -18,6 +18,8 @@ const DrawPixel = require("./DrawPixel");
 const ResetBoard = require("./ResetBoard");
 const AccountInfo = require("./AccountInfo");
 const ServerList = require("./ServerList");
+const AccountToken = require("./AccountToken");
+const TokenExpired = require("./TokenExpired");
 
 module.exports = {
     GameType,
@@ -38,4 +40,6 @@ module.exports = {
     ResetBoard,
     AccountInfo,
     ServerList,
+    AccountToken,
+    TokenExpired,
 }

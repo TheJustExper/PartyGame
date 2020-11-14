@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://exper:test@cluster0.tzg1u.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true";
+const uri = "mongodb+srv://exper:test@cluster0.lorg0.mongodb.net/test";
 let mongodb;
 
 function connect(callback){

@@ -10,10 +10,11 @@ PlayerList.prototype.build = function () {
     const buf = msgpack.encode({
         opcode: 1,
         data: {
-            players: this.players.map(({ nickname, rank, color }) => ({
+            players: this.players.map(({ nickname, rank, color, account }) => ({
                  nickname,
                  rank,
-                 color
+                 color,
+                 level: account ? account.level : 0
             }))
         }
     });

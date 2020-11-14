@@ -87,9 +87,16 @@ export default class {
         this.send(buf);
     }
 
-    onOpen() {
-        this.core.accountAuth();
+    sendToken(token) {
+        const buf = msgpack.encode({ 
+            opcode: 3, 
+            data: { token }
+        });
 
+        this.send(buf);
+    }
+
+    onOpen() {
         if (this.ip.split(":")[2] != "8080") {
             this.core.serverJoined();
         }
