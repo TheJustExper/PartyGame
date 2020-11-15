@@ -16,7 +16,7 @@
         },
         "skribbl": {
             "Timer": {
-                "roundTimer": 60,
+                "roundTimer": 3,
                 "endGame": 5000,
                 "endGameLeaderboard": 3000,
                 "newRound": 4000

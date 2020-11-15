@@ -60,45 +60,42 @@ class GameServer {
         this.gamemode = new (this.gamemodes[this.gameType])(this);
     }
 
-    onConnection(ws, req) {
+    async onConnection(ws, req) {
         if (this.state == "LOBBY" || this.state == "COUNTDOWN") {
             const ip = req.socket.remoteAddress;
             let player = null;
             
-            ws.onmessage = (message) => {
+            ws.onmessage = async (message) => {
                 const msg = msgpack.decode(message.data);
                 
                 switch(msg.opcode) {
                     case 0:
                         const token = req.url.split("token=")[1];
                         const { username } = msg.data;
+                        let playerObj;
                         
                         if (username.length > 0 && username.length < 12) {
                             if (token != null) {
-                                jwt.verify(token, process.env.TOKEN_SECRET, (err, { username }) => {
-                                    db.get().collection("users").findOne({ username }, (err, user) => {
-                                        var playerObj = new Player({ ip, ws, game: this, account: user });
+                                try {
+                                    const { username } = await jwt.verify(token, process.env.TOKEN_SECRET);
+                                    const user = await db.get().collection("users").findOne({ username });
+                                    
+                                    playerObj = new Player({ ip, ws, game: this, account: user });
 
-                                        playerObj.nickname = username;
-                                        player = playerObj;
-
-                                        this.players.push(playerObj);
-                                        this.broadcast(new Packets.PlayerList(this.players));
-
-                                        this.startGame();
-                                    });
-                                });
+                                } catch(err) {
+                                    logger.debug(err);
+                                }
                             } else {
-                                var playerObj = new Player({ ip, ws, game: this });
-
-                                playerObj.nickname = username;
-                                player = playerObj;
-
-                                this.players.push(playerObj);
-                                this.broadcast(new Packets.PlayerList(this.players));
-
-                                this.startGame();
+                                playerObj = new Player({ ip, ws, game: this });
                             }
+
+                            playerObj.nickname = username;
+                            player = playerObj;
+
+                            this.players.push(playerObj);
+                            this.broadcast(new Packets.PlayerList(this.players));
+
+                            this.startGame();
                         }
                         
                         break;

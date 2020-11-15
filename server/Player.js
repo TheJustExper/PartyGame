@@ -22,14 +22,21 @@ class Player {
         this.score = 0;
         this.nickname = "Guest";
         this.state = "USERNAME";
-        this.color = account ? "#0a5efb" : this.getRandomColor();
+        this.color = this.getRandomColor();
         this.rank = account ? "ACCOUNT" : "GUEST";
         this.account = account;
 
         if (this.account != null) {
             if (this.account.username == "Exper") {
                 this.rank = "DEVELOPER";
+                this.color = "#0a5efb";
             }
+            if (this.account.username == "Magzi" || this.account.username == "Maestro") {
+                this.rank = "BETA";
+                this.color = "#bb35ff";
+            }
+        } else {
+            this.color = "#b7b7b7";
         }
 
         ws.on("message", this.handleMessage.bind(this));

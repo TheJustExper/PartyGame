@@ -64,11 +64,7 @@ export default class {
         const welcome = document.getElementById("welcome");
         welcome.classList.toggle("show2");
 
-        setTimeout(() => {
-            if (Account.getToken() != null) {
-                this.socket.sendToken(Account.getToken());
-            }
-        }, 1000)
+        setTimeout(() => Account.getToken() != null ? this.socket.sendToken(Account.getToken()) : "", 150)
     }
 
     setup() {
@@ -408,25 +404,37 @@ export default class {
         let account = Account.getAccountInfo();
 
         if (account != null) {
-            const { username, level } = account;
+            const { username, level, coins } = account;
 
             document.getElementById("profile").outerHTML = `<div class="container" id="profile">
             <div class="header">
                 <div class="side">
-                    <img id="profileImg" src="https://image.freepik.com/free-vector/flying-slice-pizza-cartoon-vector-illustration-fast-food-concept-isolated-vector-flat-cartoon-style_138676-1934.jpg"/>
-                    <div class="text">
-                        <h1>${username}</h1>
-                        <b>Level: <span style="color: gold;">${level}</span></b>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <img id="profileImg" src="https://image.freepik.com/free-vector/flying-slice-pizza-cartoon-vector-illustration-fast-food-concept-isolated-vector-flat-cartoon-style_138676-1934.jpg"/>
+                        <div class="text">
+                            <h1>${username}</h1>
+                            <b>Level: <span style="color: gold;">${level}</span></b>
+                        </div>
+                    </div>
+                    <b style="color: white">Coins: <span style="color: gold;">${coins}</span></b>
+                </div>
+                <div class="div">
+                    <div class="xp-container">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div id="xp-bar"></div>
                     </div>
                 </div>
             </div>
             <div class="bottom">
-                <div class="buttons">
-                    <div class="button">Shop</div>
-                    <div class="button">Stats</div>
-                    <div class="button">...</div>
-                    <div class="button">...</div>
-                </div>
                 <button id="logout">Logout</button>
             </div>
         </div>`;

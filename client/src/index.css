@@ -894,7 +894,7 @@
 
  #logout {
     width: 100%;
-    height: 50px;
+    height: 40px;
     border-radius: 5px;
     border: 2px solid rgb(0 0 0);
     flex: 1 0 16%;
@@ -902,7 +902,6 @@
     color: rgb(255 255 255);
     BOX-SIZING: border-box;
     user-select: none;
-    margin-top: 15px;
  }
 
  #menu .info {
@@ -1268,7 +1267,6 @@
     justify-content: space-between;
     position: relative;
     flex-direction: row;
-    border-bottom: 1px solid black;
  }
 
  .popup .content .setting .text b {
@@ -1344,7 +1342,6 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 180px;
     background-color: rgb(47 52 61);
     border-radius: 3px;
     box-sizing: border-box;
@@ -1388,9 +1385,9 @@
  #main #profile .header {
     background-color: rgb(47 52 61);
     width: 100%;
-    height: 80px;
+    height: 100px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     padding: 15px;
     box-sizing: border-box;
     justify-content: space-between;
@@ -1400,10 +1397,38 @@
     border-color: rgb(0, 0, 0);
  }
 
+ .div {
+     display: flex;
+     flex-direction: column;
+ }
+
+ .xp-container {
+    width: 100%;
+    height: 5px;
+    background-color: #222529;
+    border: 1px solid;
+    display: flex;
+    position: relative;
+ }
+
+ .xp-container #xp-bar {
+    height: 100%;
+    width: 30%;
+    background: var(--regular-color);
+    position: absolute;
+ }
+
+ .xp-container .bar {
+     width: 25.1px;
+     height: 100%;
+     border-right: 1px solid black;
+     z-index: 1;
+ }
+
  #main #profile .header .side {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    justify-content: space-between;
  }
 
  #main #profile .header .icons {

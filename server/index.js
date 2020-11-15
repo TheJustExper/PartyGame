@@ -64,7 +64,7 @@ async function run() {
                                 var packet = new Packets.AccountToken(token);
                                 sendPacket(ws, packet);
 
-                                var info = { username: username, level: user.level }
+                                var info = { username: username, level: user.level, coins: user.coins }
                                 var account = new Packets.AccountInfo(info);
                                 sendPacket(ws, account);
                             }
@@ -96,7 +96,7 @@ async function run() {
                         try {
                             var userObj = await jwt.verify(token, process.env.TOKEN_SECRET);
                             var user = await users.findOne({ username: userObj.username });
-                            var info = { username: user.username, level: user.level }
+                            var info = { username: user.username, level: user.level, coins: user.coins }
                             var account = new Packets.AccountInfo(info);
                             sendPacket(ws, account);
                         } catch (err) {

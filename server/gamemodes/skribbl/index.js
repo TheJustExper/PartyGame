@@ -1,5 +1,6 @@
 const Packets = require("../../packets/packets");
 const config = require('config');
+const db = require("../../database/Database");
 
 
 module.exports = class {
@@ -30,7 +31,7 @@ module.exports = class {
         this.playerAskedToPickCatagory = null;
         this.isChanging = false;
 
-        this.gameMax = 10;
+        this.gameMax = 1;
         this.gameIndex = 0;
 
         this.playerIndex = 0;
@@ -84,10 +85,10 @@ module.exports = class {
         }
 
         if (msg.toLowerCase() == this.pickedCatagory.toLowerCase()) {
-            if (!this.playersCorrect.find(p => p.id == player.id)) {
-                this.playersCorrect.push(player);
-            }
-
+            if (this.playersCorrect.find(p => p.id == player.id)) return;
+            
+            this.playersCorrect.push(player);
+            
             player.score += 20;
 
             let players = this.playersCorrect.length + "/" + (this.gameServer.players.length - 1);
@@ -158,13 +159,25 @@ module.exports = class {
         this.startTimer();
     }
 
-    checkGameIndex() {
+    async checkGameIndex() {
         if (this.gameIndex == this.gameMax) {
             this.gameServer.broadcast(new Packets.ChatMessage("[SERVER]", `Game is ending!`, "rgb(133 109 255)"))
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 this.gameServer.broadcast(new Packets.LeaderBoard(this.gameServer.players));
                 this.gameServer.broadcast(new Packets.GameEnded());
+
+                let winners = this.gameServer.players.sort((a, b) => a.score - b.score).slice(0, 3);
+
+                winners.forEach(async (winner, index) => {
+                    if (winner.account != null) {
+                        var myquery = { username: winner.account.username };
+                        var newvalues = { $set: { coins: winner.account.coins + ((index + 1) * 100) } };
+                        await db.get().collection("users").updateOne(myquery, newvalues);
+
+                        console.log("Added coins to user")
+                    }
+                });
 
                 setTimeout(() => {
                     this.gameServer.broadcast(new Packets.EndGame())
